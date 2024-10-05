@@ -26,10 +26,10 @@ const Navbar = () => {
                 </div>
                 {
                     //still in dev
-                    state.appDetails.debug && 
-                    <div className="nav-item">
-                        <Link className="nav-link" to="/map">Map</Link>
-                    </div>
+                    // state.appDetails.debug && 
+                    // <div className="nav-item">
+                    //     <Link className="nav-link" to="/map">Map</Link>
+                    // </div>
                 }
                 {
                     //debug menu

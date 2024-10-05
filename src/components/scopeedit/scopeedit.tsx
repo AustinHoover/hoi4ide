@@ -133,6 +133,9 @@ const ScopeEdit = (props: ScopeEditProps) => {
     const state = context.state
     const dispatch = context.dispatch
 
+    //used to filter recruitment blocks
+    const [filterRecruitment, setFilterRecruitment] = React.useState(false)
+
     let scopeBlocks: JSX.Element[] = []
 
     let openModal = () => {
@@ -144,7 +147,12 @@ const ScopeEdit = (props: ScopeEditProps) => {
 
     if(props.scopedObject.scopes){
         let scopes = [...props.scopedObject.scopes]
-        scopeBlocks = scopes.map(scope => {
+        scopeBlocks = scopes
+        .filter(scope => {
+            return scope.name !== "recruit_character" ||
+            (scope.name === "recruit_character" && !filterRecruitment)
+        })
+        .map(scope => {
             return <ScopeBlock scope={scope} indent={0} openModal={openModal}/>
         })
     }
@@ -152,6 +160,14 @@ const ScopeEdit = (props: ScopeEditProps) => {
     return (
         <div className="w-100 h-100 overflow-auto d-flex flex-column align-items-start">
             <ScopeSelectDialogComponent onSave={(option: string)=>{}} show={showSelectModal} setShow={setShowSelectModal}/>
+            <div className="flex-row m-3">
+                <input className="form-check-input" type="checkbox" id="recruitmentFilterCheckbox"
+                onChange={(event) => {setFilterRecruitment(event.target.checked)}}
+                />
+                <label className="form-check-label" htmlFor="recruitmentFilterCheckbox">
+                    Filter Recruitments
+                </label>
+            </div>
             {scopeBlocks}
         </div>
     );
