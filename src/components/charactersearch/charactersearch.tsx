@@ -24,14 +24,20 @@ const CharacterSearch = (props: CharacterSearchProps) => {
     let [filterString, setFilterString] = React.useState("")
 
     let charactersToInclude: Character[] = []
-    charactersToInclude = state.projectDetails.characterEditing.characters.filter(character => character.properties.name && character.properties.name.toLocaleLowerCase().includes(filterString))
+    charactersToInclude = state.projectDetails?.characterEditing?.characters?.filter(character => 
+        !!character?.properties?.name && 
+        character.properties.name?.toLocaleLowerCase?.()?.includes(filterString)
+    )
     if(charactersToInclude.length > 5){
         charactersToInclude.length = 5
     }
 
     let filterFunction = (input: any) => {
         setFilterString(input.target.value)
-        charactersToInclude = state.projectDetails.characterEditing.characters.filter(character => character.properties.name && character.properties.name.toLocaleLowerCase().includes(filterString))
+        charactersToInclude = state.projectDetails?.characterEditing?.characters?.filter(character => 
+            !!character?.properties?.name &&
+            character.properties.name?.toLocaleLowerCase?.()?.includes(filterString)
+        )
         if(charactersToInclude.length > 5){
             charactersToInclude.length = 5
         }
