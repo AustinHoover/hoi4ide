@@ -2,6 +2,7 @@ import * as React from "react";
 
 import "./dropdowngeneric.css"
 import { ChangeEvent } from "react";
+import ReactSelect, { ActionMeta, SingleValue } from "react-select";
 
 /**
  * Dropdown props
@@ -25,14 +26,14 @@ export interface GenericDropdownProps {
     initialValue?: string,
 
     /**
-     * The maximum number of options to display at once
-     */
-    displayLimit?: number,
-
-    /**
      * The overflow behavior for the dropdown options
      */
     overflow?: boolean,
+
+    /**
+     * Controls whether the dropdown is clearable or not
+     */
+    isClearable?: boolean,
 }
 
 /**
@@ -40,55 +41,33 @@ export interface GenericDropdownProps {
  */
 const GenericDropdown = (props: GenericDropdownProps) => {
 
-    let [value, setValue] = React.useState("")
-
-    React.useEffect(()=>{
-        if(props.initialValue){
-            setValue(props.initialValue)
+    /**
+     * Options available
+     */
+    const options = props.options.map(option => {
+        return {
+            value: option,
+            label: option,
         }
-    },[props.initialValue])
+    }) as any
 
-
-    let optionsToInclude: string[] = []
-    optionsToInclude = props.options
-    if(props.displayLimit && optionsToInclude.length > props.displayLimit){
-        optionsToInclude.length = props.displayLimit
-    }
-
-    let onChange = (input: ChangeEvent<HTMLSelectElement>) => {
-        const value: string | null = input.target.value
-        optionsToInclude = props.options
-        if(props.displayLimit && optionsToInclude.length > props.displayLimit){
-            optionsToInclude.length = props.displayLimit
-        }
+    let onChange = (newValue: SingleValue<string>, actionMeta: ActionMeta<string>) => {
+        const value: string = newValue ? newValue : ''
         if(!!props.onSelect){
             props.onSelect(value)
         }
-        setValue(value)
     }
 
-    let contents: JSX.Element[] = []
-    optionsToInclude.forEach((option,i) => {
-        contents.push(
-            <option className="dropdown-item" key={option + "-" + i} 
-            style={{overflow: props.overflow ? "auto" : ""}}
-            >
-                {option}
-            </option>
-        )
-    })
+    //clearable status
+    const clearable: boolean = props.isClearable ? props.isClearable : false
     
     return (
         <div className="dropdown" style={{overflow: props.overflow ? "auto" : ""}}>
-            <select
-                className="m-2 form-control"
-                placeholder="Search.."
-                id="myInput"
-                onChange={onChange}
-                value={value}
-            >
-                {contents}
-            </select>
+            <ReactSelect
+            options={options}
+            onChange={onChange}
+            isClearable={clearable}
+            />
         </div>
     );
 }

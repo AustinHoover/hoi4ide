@@ -58,10 +58,20 @@ const ScopeEdit = (props: ScopeEditProps) => {
         setEdited(false)
     }
 
+
+    //state for addition modal
+    const [additionTarget, setAdditionTarget] = React.useState<Scope>()
+
     //opens the modal to add a new scope
-    let openModal = () => {
-        console.log("show modal")
+    const openModal = (scope: Scope) => {
         setShowSelectModal(true)
+        setAdditionTarget(scope)
+    }
+
+    //invoked on saving the scope addition modal
+    const onSaveModal = () => {
+        //update dom
+        setScopes([...scopes])
     }
 
     //controls visibility of the scope addition modal
@@ -88,7 +98,7 @@ const ScopeEdit = (props: ScopeEditProps) => {
     
     return (
         <div className="w-100 h-100 overflow-auto d-flex flex-column align-items-start">
-            <ScopeSelectDialogComponent onSave={(option: string)=>{}} show={showSelectModal} setShow={setShowSelectModal}/>
+            <ScopeSelectDialogComponent onSave={onSaveModal} show={showSelectModal} setShow={setShowSelectModal} scope={additionTarget}/>
             <div className="form-check m-3">
                 <input className="form-check-input" type="checkbox" id="recruitmentFilterCheckbox"
                     onChange={(event) => {setFilterRecruitment(event.target.checked)}}

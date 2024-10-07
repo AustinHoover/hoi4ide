@@ -4,6 +4,7 @@ import { Plus, TrashFill } from "react-bootstrap-icons";
 import { effectDefinitions } from "../../pdxapi/effectDefinitions";
 import { scopeDeclarations, SCOPE_TYPE } from "../../pdxapi/scopeDefinitions";
 import { triggerDefinitions } from "../../pdxapi/triggerDefinitions";
+import { ScopeableObject } from "../../interface/rawFile.interface";
 
 
 /**
@@ -24,7 +25,7 @@ export interface ScopeBlockProps {
     /**
      * Callback to call when adding an element
      */
-    openModal: () => void,
+    openModal: (scopeableObj: Scope) => void,
 
     /**
      * Callback to call when deleting an element
@@ -165,7 +166,7 @@ const ScopeBlock = (props: ScopeBlockProps) => {
                 fontSize: "30px",
             }}
             onClick={()=>{
-                props.openModal()
+                props.openModal(props.scope)
                 // logAllowedScopes(props.scope.type)
             }}
             />
