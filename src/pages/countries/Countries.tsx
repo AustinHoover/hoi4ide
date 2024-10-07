@@ -9,6 +9,9 @@ import ScopeEdit from "../../components/scopeedit/scopeedit";
 import TemplateEdit from "../../components/templateedit/templateedit";
 import UnitEdit from "../../components/unitedit/unitedit";
 import { AppContextInterface } from "../../state/mainState.interface";
+import { ScopeableObject } from "../../interface/rawFile.interface";
+import { createActionEditState } from "../../state/mainState.actions";
+import { HistoryCountryFile } from "../../interface/rawFile.interface";
 
 import './Countries.css';
 
@@ -28,9 +31,14 @@ const Countries = () => {
             } break;
             case 1: {
                 //@ts-ignore
-                let scope = state.projectDetails.projectFiles.historyCountryFiles.find(scopeFile => scopeFile.path.includes(currentCountry.tag))
-                if(scope){
-                    content = <ScopeEdit scopedObject={scope}/>
+                let scopeFile: HistoryCountryFile = state.projectDetails.projectFiles.historyCountryFiles.find(scopeFile => scopeFile.path.includes(currentCountry.tag))
+                const onSave = (scopeObj: ScopeableObject) => {
+                    scopeFile.scopes = scopeObj.scopes
+                    const newState = {...state}
+                    dispatch(createActionEditState(newState))
+                }
+                if(scopeFile){
+                    content = <ScopeEdit scopedObject={scopeFile} onSave={onSave}/>
                 } else {
                     content = <div>No scope file found..</div>
                 }
