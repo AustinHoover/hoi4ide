@@ -176,10 +176,33 @@ export interface MapEditing {
     imgData: ImageData | null,
 }
 
+/**
+ * A state
+ */
 export interface State {
+    /**
+     * The id of the state
+     */
     id: number,
+
+    /**
+     * The name of the state
+     */
     name: string,
+
+    /**
+     * The owner tag of the state, if one exists
+     */
     ownerTag: string,
+
+    /**
+     * The provinces contained in the state
+     */
+    provinces: number[],
+
+    /**
+     * The history file associated with the state object
+     */
     historyFile: HistoryStateFile,
 }
 

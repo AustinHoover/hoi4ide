@@ -4,7 +4,7 @@ import { AppContext } from "../../App";
 import { CharacterProperties, UnitHistoryFile } from "../../interface/rawFile.interface";
 import { createActionOpenCharacter, createActionOpenCountry, createActionOpenState } from "../../state/mainState.actions";
 import { AppContextInterface, Character, Country } from "../../state/mainState.interface";
-import GenericDropdown from "../dropdowngeneric/dropdowngeneric";
+import GenericDropdown, { DropdownOption } from "../dropdowngeneric/dropdowngeneric";
 
 import "./unitedit.css"
 
@@ -22,7 +22,7 @@ const UnitEdit = (props: UnitEditProps) => {
 
     let [currentFile, setCurrentFile] = React.useState("")
 
-    let fileOptions: string[] = []
+    let fileOptions: DropdownOption[] = []
 
     let fileMap: any = {}
     props.unitFiles.forEach((unitFile) => {
@@ -30,13 +30,16 @@ const UnitEdit = (props: UnitEditProps) => {
         let regex = unitFile.path.match(/^.*[\\\/]([^\/\\]*)\.[^\/\\]*$/)
         if(regex){
             let fileName = regex[1]
-            fileOptions.push(fileName)
+            fileOptions.push({
+                label: fileName,
+                value: fileName,
+            })
             fileMap[fileName] = unitFile
         }
     })
 
-    let selectFile = (file: string): string => {
-        setCurrentFile(file)
+    let selectFile = (file: any): string => {
+        setCurrentFile(file.value)
         return file
     }
 
@@ -45,10 +48,13 @@ const UnitEdit = (props: UnitEditProps) => {
     if(currentFile !== "" && fileMap[currentFile]){
         let unitFile: UnitHistoryFile = fileMap[currentFile]
         //discover templates
-        let templates: string[] = []
+        let templates: DropdownOption[] = []
         if(unitFile.division_template){
             unitFile.division_template.forEach(template => {
-                templates.push(template.name)
+                templates.push({
+                    label: template.name,
+                    value: template.name,
+                })
             })
         }
         let selectTemplate = (template: string): string => {
@@ -62,7 +68,7 @@ const UnitEdit = (props: UnitEditProps) => {
                     <div style={{display: "flex", flexDirection: "column", alignItems: "start"}}>
                         <span>Name: {unit.name ? unit.name : unit.division_name?.name_order}</span>
                         <span>Location: {unit.location}</span>
-                        <span style={{display: "flex", flexDirection: "row", alignItems: "center"}}>Template: <GenericDropdown options={templates} onSelect={selectTemplate} initialValue={unit.division_template}/></span>
+                        <span style={{display: "flex", flexDirection: "row", alignItems: "center"}}>Template: <GenericDropdown options={templates} onChange={selectTemplate} initialValue={unit.division_template}/></span>
                     </div>
                 </div>)
             })
@@ -72,7 +78,7 @@ const UnitEdit = (props: UnitEditProps) => {
     return (
         <div className="w-100 h-100">
             <div style={{display: "flex", flexDirection: "row", justifyContent: "center"}}>
-                <GenericDropdown options={fileOptions} onSelect={selectFile}/>
+                <GenericDropdown options={fileOptions} onChange={selectFile}/>
             </div>
             <div style={{display: "flex", flexDirection: "row", flexWrap: "wrap", overflow: "auto"}}>
                 {unitsWidget}

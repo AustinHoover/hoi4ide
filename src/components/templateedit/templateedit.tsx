@@ -4,7 +4,7 @@ import { AppContext } from "../../App";
 import { CharacterProperties, UnitHistoryFile } from "../../interface/rawFile.interface";
 import { createActionOpenCharacter, createActionOpenCountry, createActionOpenState } from "../../state/mainState.actions";
 import { AppContextInterface, Character, Country } from "../../state/mainState.interface";
-import GenericDropdown from "../dropdowngeneric/dropdowngeneric";
+import GenericDropdown, { DropdownOption } from "../dropdowngeneric/dropdowngeneric";
 import TemplateMatrix from "../templatematrix/templatematrix";
 
 import "./templateedit.css"
@@ -23,7 +23,7 @@ const TemplateEdit = (props: TemplateEditProps) => {
 
     let [currentFile, setCurrentFile] = React.useState("")
 
-    let fileOptions: string[] = []
+    let fileOptions: DropdownOption[] = []
 
     let fileMap: any = {}
     props.unitFiles.forEach((unitFile) => {
@@ -31,13 +31,16 @@ const TemplateEdit = (props: TemplateEditProps) => {
         let regex = unitFile.path.match(/^.*[\\\/]([^\/\\]*)\.[^\/\\]*$/)
         if(regex){
             let fileName = regex[1]
-            fileOptions.push(fileName)
+            fileOptions.push({
+                label: fileName,
+                value: fileName,
+            })
             fileMap[fileName] = unitFile
         }
     })
 
-    let selectFile = (file: string): string => {
-        setCurrentFile(file)
+    let selectFile = (file: any): string => {
+        setCurrentFile(file.value)
         return file
     }
     let templateMatrixCards: JSX.Element[] = []
@@ -56,7 +59,7 @@ const TemplateEdit = (props: TemplateEditProps) => {
     return (
         <div className="w-100 h-100">
             <div style={{display: "flex", flexDirection: "row", justifyContent: "center"}}>
-                <GenericDropdown options={fileOptions} onSelect={selectFile}/>
+                <GenericDropdown options={fileOptions} onChange={selectFile}/>
             </div>
             <div style={{display: "flex", flexDirection: "row", flexWrap: "wrap"}}>
                 {templateMatrixCards}

@@ -5,7 +5,7 @@ import { createActionOpenCharacter } from "../../state/mainState.actions";
 import { AppContextInterface, Character } from "../../state/mainState.interface";
 
 import "./charactersearch.css"
-import GenericDropdown from "../dropdowngeneric/dropdowngeneric";
+import GenericDropdown, { DropdownOption } from "../dropdowngeneric/dropdowngeneric";
 
 
 export interface CharacterSearchProps {
@@ -21,12 +21,15 @@ const CharacterSearch = (props: CharacterSearchProps) => {
     const dispatch = context.dispatch
 
     const characters = state.projectDetails?.characterEditing?.characters.filter(character => !!character?.properties?.name)
-    const names: string[] = characters.map(character => 
-        character.properties?.name
-    )
+    const names: DropdownOption[] = characters.map(character => {
+        return {
+            label: character.properties?.name,
+            value: character.properties?.name,
+        }
+    })
 
-    const onSelect = (value: string) => {
-        const foundChar: Character | undefined = characters.find(character => character.properties?.name === value)
+    const onSelect = (value: any) => {
+        const foundChar: Character | undefined = characters.find(character => character.properties?.name === value.value)
         if(foundChar){
             dispatch(createActionOpenCharacter(foundChar))
         }
@@ -38,7 +41,7 @@ const CharacterSearch = (props: CharacterSearchProps) => {
         <div className="dropdown mb-5 w-50">
             <GenericDropdown
                 options={names}
-                onSelect={onSelect}
+                onChange={onSelect}
             />
         </div>
     );

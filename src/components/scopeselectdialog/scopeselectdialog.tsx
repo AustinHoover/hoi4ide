@@ -5,7 +5,7 @@ import { effectDefinitions } from "../../pdxapi/effectDefinitions";
 import { triggerDefinitions } from "../../pdxapi/triggerDefinitions";
 import { createActionOpenCountry } from "../../state/mainState.actions";
 import { AppContextInterface, Country } from "../../state/mainState.interface";
-import GenericDropdown from "../dropdowngeneric/dropdowngeneric";
+import GenericDropdown, { DropdownOption } from "../dropdowngeneric/dropdowngeneric";
 import { Scope } from "../../interface/scope.interface";
 
 import "./scopeselectdialog.css"
@@ -53,22 +53,32 @@ const ScopeSelectDialogComponent = (props: ScopeSelectDialogComponentProps) => {
     const scope = props.scope
 
     //the effects and triggers available
-    let effectNameList: string[] = effectDefinitions.filter(effect => 
+    let effectNameList: DropdownOption[] = effectDefinitions.filter(effect => 
         effect.name &&
         (
             !scope?.type ||
             effect.allowedScopes.includes(scope.type) ||
             effect.allowedScopes.includes(SCOPE_TYPE.ANY)
         )
-    ).map(effect => effect.name) as string[]
-    let triggerNameList: string[] = triggerDefinitions.filter(trigger =>
+    ).map(effect => {
+        return {
+            label: effect.name ? effect.name : '',
+            value: effect.name ? effect.name : '',
+        }
+    })
+    let triggerNameList: DropdownOption[] = triggerDefinitions.filter(trigger =>
         trigger.name &&
         (
             !scope?.type ||
             trigger.allowedScopes.includes(scope.type) ||
             trigger.allowedScopes.includes(SCOPE_TYPE.ANY)
         )
-    ).map(trigger => trigger.name) as string[]
+    ).map(trigger => {
+        return {
+            label: trigger.name ? trigger.name : '',
+            value: trigger.name ? trigger.name : '',
+        }
+    })
 
     //state of the modal itself
     const [effect,setEffect] = React.useState<string>()
@@ -103,9 +113,9 @@ const ScopeSelectDialogComponent = (props: ScopeSelectDialogComponentProps) => {
                             </div>
                             <div className="modal-body">
                                 <label>Effects</label>
-                                <GenericDropdown options={effectNameList} onSelect={selectEffectCallback} isClearable={true}/>
+                                <GenericDropdown options={effectNameList} onChange={selectEffectCallback} isClearable={true}/>
                                 <label className="mt-4">Triggers</label>
-                                <GenericDropdown options={triggerNameList} onSelect={selectTriggerCallback} isClearable={true}/>
+                                <GenericDropdown options={triggerNameList} onChange={selectTriggerCallback} isClearable={true}/>
                             </div>
                             <div className="modal-footer">
                                 <button

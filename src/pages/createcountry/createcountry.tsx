@@ -5,7 +5,7 @@ import { AppContext } from "../../App";
 import CountryEdit from "../../components/countryedit/countryedit";
 import CountryEditTabs from "../../components/countryedittabs/countryedittabs";
 import CountrySearch from "../../components/countrysearch/countrysearch";
-import GenericDropdown from "../../components/dropdowngeneric/dropdowngeneric";
+import GenericDropdown, { DropdownOption } from "../../components/dropdowngeneric/dropdowngeneric";
 import ImageInput from "../../components/imageinput/imageinput";
 import Navbar from "../../components/navbar/navbar";
 import ScopeEdit from "../../components/scopeedit/scopeedit";
@@ -15,14 +15,35 @@ import { AppContextInterface, Country } from "../../state/mainState.interface";
 
 import './createcountry.css';
 
-const graphicsCultures: string[] = [
-    "western_european",
-    "eastern_european",
-    "middle_eastern",
-    "african",
-    "asian",
-    "southamerican",
-    "commonwealth",
+const graphicsCultures: DropdownOption[] = [
+    {
+        label: "western_european",
+        value: "western_european",
+    },
+    {
+        label: "eastern_european",
+        value: "eastern_european",
+    },
+    {
+        label: "middle_eastern",
+        value: "middle_eastern",
+    },
+    {
+        label: "african",
+        value: "african",
+    },
+    {
+        label: "asian",
+        value: "asian",
+    },
+    {
+        label: "southamerican",
+        value: "southamerican",
+    },
+    {
+        label: "commonwealth",
+        value: "commonwealth",
+    },
 ]
 
 //as grabbed from https://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
@@ -191,7 +212,7 @@ const CreateCountry = () => {
                         <input onChange={(event)=>{setName(event.target.value)}} className="form-control" type="text" style={{maxWidth: "500px"}}></input>
                         <span>Culture Graphics</span>
                         <GenericDropdown options={graphicsCultures} 
-                        onSelect={(option: string)=>{setGraphics(option);return option}} 
+                        onChange={(option: any)=>{setGraphics(option.value)}} 
                         />
                         <span>Color</span>
                         <HexColorPicker color={color} onChange={setColor}/>

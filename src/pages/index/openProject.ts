@@ -693,6 +693,7 @@ export const openProject = async (context: AppContextInterface, projectDir: stri
             id: stateFile.state.id,
             name: stateFile.state.name,
             ownerTag: "",
+            provinces: [],
             historyFile: stateFile,
         }
         stateFile?.state?.history?.scopes?.forEach(scope => {
@@ -700,6 +701,9 @@ export const openProject = async (context: AppContextInterface, projectDir: stri
                 newState.ownerTag = scope.object
             }
         })
+        if(stateFile?.state?.provinces){
+            newState.provinces = stateFile?.state?.provinces
+        }
         projectDetails.stateEditing.states.push(newState)
     })
     //discover characters
