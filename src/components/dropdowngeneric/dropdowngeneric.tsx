@@ -66,6 +66,11 @@ export interface GenericDropdownProps {
      * An optional label for the dropdown
      */
     label?: string,
+
+    /**
+     * Controls whether the menu should close on select or not
+     */
+    closeMenuOnSelect?: boolean,
 }
 
 /**
@@ -95,6 +100,7 @@ const GenericDropdown = (props: GenericDropdownProps) => {
             windowThreshold={50}
             value={props?.value !== undefined ? props.value : undefined}
             isMulti={props.isMulti}
+            closeMenuOnSelect={props.closeMenuOnSelect}
             />
         </div>
     );

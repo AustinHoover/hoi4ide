@@ -1,17 +1,24 @@
 import * as React from "react";
-import { FilePerson, Plus, Trash, Tree } from "react-bootstrap-icons";
+import { Plus, Trash } from "react-bootstrap-icons";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../../App";
-import { createActionDeleteCharacter, createActionDeleteUnit, createActionOpenCharacter, createActionOpenCountry, createActionOpenState } from "../../state/mainState.actions";
+import { createActionDeleteCharacter, createActionOpenCharacter, createActionOpenCountry } from "../../state/mainState.actions";
 import { AppContextInterface, Country } from "../../state/mainState.interface";
 import ImageDisplay from "../imagedisplay/imagedisplay";
 
 import "./countryedit.css"
+import OwnedStateBadges from "./ownedstatebadges";
 
+/**
+ * Props for the page
+ */
 export interface CountryEditProps {
     country: Country
 }
 
+/**
+ * The country to display on error
+ */
 const errorCountry: Country = {
     tag: "ERR",
     color: [255, 0, 0],
@@ -34,6 +41,9 @@ const errorCountry: Country = {
     unitFiles: [],
 }
 
+/**
+ * Primary view for country editing
+ */
 const CountryEdit = (props: CountryEditProps) => {
 
     const navigate = useNavigate()
@@ -45,20 +55,6 @@ const CountryEdit = (props: CountryEditProps) => {
     let [currentTab, setCurrentTab] = React.useState(0);
 
     let currentCountry: Country = state.projectDetails.countryEditing.currentlySelectedCountry ? state.projectDetails.countryEditing.currentlySelectedCountry : errorCountry
-
-    let statesOwned = state.projectDetails.stateEditing.states.filter(state => state.ownerTag === currentCountry.tag)
-    let statesOwnedBadges = statesOwned.map(stateData => {
-        let selectState = () => {
-            dispatch(createActionOpenState(stateData))
-            navigate("/states")
-        }
-        return <div key={stateData.name} className="card m-1 p-2 shadow" 
-        style={{cursor: "pointer", width: "24%", display: "flex", flexDirection: "row", justifyContent: "start", alignItems: "center" }}
-        onClick={selectState}>
-            <Tree style={{marginRight: "15%"}}/>
-            {state.projectDetails.localisationMap[stateData.name]}
-            </div>
-    })
 
     let tagRegex = new RegExp(`${currentCountry.tag}_`)
     let characters = state.projectDetails.characterEditing.characters.filter(character => character.tag.match(tagRegex))
@@ -150,9 +146,7 @@ const CountryEdit = (props: CountryEditProps) => {
             </div>
             {
                 currentTab === 0 &&
-                <div style={{display: "flex", flexDirection: "row", flexWrap: "wrap"}}>
-                    {statesOwnedBadges}
-                </div>
+                <OwnedStateBadges currentCountry={currentCountry}/>
             }
             {
                 currentTab === 1 &&

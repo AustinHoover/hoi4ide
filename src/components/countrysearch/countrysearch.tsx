@@ -30,7 +30,6 @@ const CountrySearch = (props: CountrySearchProps) => {
 
     const onSelect = (value: any) => {
         const country: Country | undefined = countries.find(country => state.projectDetails.localisationMap[country.tag] === value.value)
-        console.log(country)
         if(country){
             dispatch(createActionOpenCountry(country))
         }
