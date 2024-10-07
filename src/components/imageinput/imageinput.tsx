@@ -54,13 +54,13 @@ const ImageInput = (props: ImageInputProps) => {
     let content: JSX.Element[] = []
     switch(imageState){
         case 0: {
-            content.push(<div style={{width: props.width + "px", height: props.height + "px", border: "solid 1px #686767"}}>Select an image!</div>)
+            content.push(<div key={'selectImg'} style={{width: props.width + "px", height: props.height + "px", border: "solid 1px #686767"}}>Select an image!</div>)
         } break;
         case 1: {
-            content.push(<div style={{width: props.width + "px", height: props.height + "px", border: "solid 1px #686767"}} className={`spinner-border`} role="status"/>)
+            content.push(<div key={'spinner'} style={{width: props.width + "px", height: props.height + "px", border: "solid 1px #686767"}} className={`spinner-border`} role="status"/>)
         } break;
         case 2: {
-            content.push(<ImageDisplay width={props.width} height={props.height} relativeSourcePath={props.storePath}/>)
+            content.push(<ImageDisplay key={'imgdisp'} width={props.width} height={props.height} relativeSourcePath={props.storePath}/>)
         } break;
     }
 
