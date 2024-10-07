@@ -664,10 +664,23 @@ const PARAMETER_TYPE_OBJECT = [
     PARAMETER_TYPE.MAP,
 ]
 
+/**
+ * Parses a scopeable object
+ * @param input The input object
+ * @param scopeType The type of scope
+ * @param keyPath The key path
+ * @returns The scopeable object
+ */
 export const parseScopeableObjectTwo = (input: any, scopeType: SCOPE_TYPE, keyPath?: string[]): ScopeableObject => {
     let keyPathDefined: string[] = []
     if(keyPath){
         keyPathDefined = [...keyPath]
+    }
+    //
+    //Error check inputs
+    //
+    if(!input){
+        throw new Error("Invalid argument! input is falsy " + input)
     }
     // if(
     //     keyPath &&

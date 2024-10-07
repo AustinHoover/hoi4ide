@@ -152,6 +152,9 @@ export const openProject = async (context: AppContextInterface, projectDir: stri
     vanillaFiles = fs.readdirSync(`${projectDetails.paths.vanillaDir}/${currentFileDir}`, 'utf8').filter((name: string) => !overwriteFiles.includes(name))
     overwriteFiles = overwriteFiles.map(name => `${projectDir}/${currentFileDir}/${name}`)
     vanillaFiles = vanillaFiles.map(name => `${projectDetails.paths.vanillaDir}/${currentFileDir}/${name}`)
+    if(projectDetails.projectFiles.overrideFile.overridePaths.includes('common/country_tags')){
+        vanillaFiles = []
+    }
     files = [...overwriteFiles,...vanillaFiles]
         // if(err === null){
         //     files.forEach(file => console.log(file))
@@ -176,6 +179,9 @@ export const openProject = async (context: AppContextInterface, projectDir: stri
     vanillaFiles = fs.readdirSync(`${projectDetails.paths.vanillaDir}/${currentFileDir}`, 'utf8').filter((name: string) => !overwriteFiles.includes(name))
     overwriteFiles = overwriteFiles.map(name => `${projectDir}/${currentFileDir}/${name}`)
     vanillaFiles = vanillaFiles.map(name => `${projectDetails.paths.vanillaDir}/${currentFileDir}/${name}`)
+    if(projectDetails.projectFiles.overrideFile.overridePaths.includes('common/countries')){
+        vanillaFiles = []
+    }
     files = [...overwriteFiles,...vanillaFiles]
         // if(err === null){
         //     files.forEach(file => console.log(file))
@@ -204,6 +210,9 @@ export const openProject = async (context: AppContextInterface, projectDir: stri
     vanillaFiles = fs.readdirSync(`${projectDetails.paths.vanillaDir}/${currentFileDir}`, 'utf8').filter((name: string) => !overwriteFiles.includes(name))
     overwriteFiles = overwriteFiles.map(name => `${projectDir}/${currentFileDir}/${name}`)
     vanillaFiles = vanillaFiles.map(name => `${projectDetails.paths.vanillaDir}/${currentFileDir}/${name}`)
+    if(projectDetails.projectFiles.overrideFile.overridePaths.includes('common/characters')){
+        vanillaFiles = []
+    }
     files = [...overwriteFiles,...vanillaFiles]
         // if(err === null){
         //     files.forEach(file => console.log(file))
@@ -237,6 +246,9 @@ export const openProject = async (context: AppContextInterface, projectDir: stri
     vanillaFiles = fs.readdirSync(`${projectDetails.paths.vanillaDir}/${currentFileDir}`, 'utf8').filter((name: string) => !overwriteFiles.includes(name))
     overwriteFiles = overwriteFiles.map(name => `${projectDir}/${currentFileDir}/${name}`)
     vanillaFiles = vanillaFiles.map(name => `${projectDetails.paths.vanillaDir}/${currentFileDir}/${name}`)
+    if(projectDetails.projectFiles.overrideFile.overridePaths.includes('history/countries')){
+        vanillaFiles = []
+    }
     files = [...overwriteFiles,...vanillaFiles]
         // if(err === null){
         //     files.forEach(file => console.log(file))
@@ -312,11 +324,13 @@ export const openProject = async (context: AppContextInterface, projectDir: stri
             intermediaryObject.state.state_category = intermediaryObject.state.state_category[0]
         }
         let stateHistoryFile: HistoryStateFile = intermediaryObject
-        // stateHistoryFile.state.history = <StateHistory>parseScopeableObject(intermediaryObject.state.history,SCOPE_TYPE.STATE)
-        // if(stateHistoryFile.state.id === 5){
-        //     debugger
-        // }
-        stateHistoryFile.state.history = <StateHistory>parseScopeableObjectTwo(intermediaryObject.state.history,SCOPE_TYPE.STATE,["state","history"])
+        
+        
+        //might not have history, ie if not owned by anyone currently
+        if(stateHistoryFile.state.history){
+            stateHistoryFile.state.history = <StateHistory>parseScopeableObjectTwo(intermediaryObject.state.history,SCOPE_TYPE.STATE,["state","history"])
+        }
+
         stateHistoryFile.path = path
         projectFiles.historyStateFiles.push(stateHistoryFile)
         // console.log(stateHistoryFile)
@@ -681,7 +695,7 @@ export const openProject = async (context: AppContextInterface, projectDir: stri
             ownerTag: "",
             historyFile: stateFile,
         }
-        stateFile.state.history.scopes.forEach(scope => {
+        stateFile?.state?.history?.scopes?.forEach(scope => {
             if(scope.name === "owner"){
                 newState.ownerTag = scope.object
             }
@@ -933,6 +947,9 @@ const getFilesToLoad = (relativePath: string, fs: any, projectDetails: ProjectDe
     let vanillaFiles = fs.readdirSync(`${projectDetails.paths.vanillaDir}/${relativePath}`, 'utf8').filter((name: string) => !overwriteFiles.includes(name))
     overwriteFiles = overwriteFiles.map((name: string) => `${projectDetails.paths.projectDir}/${relativePath}/${name}`)
     vanillaFiles = vanillaFiles.map((name: string) => `${projectDetails.paths.vanillaDir}/${relativePath}/${name}`)
+    if(projectDetails.projectFiles.overrideFile.overridePaths.includes(relativePath)){
+        vanillaFiles = []
+    }
     let returnFiles = [...overwriteFiles,...vanillaFiles]
     return returnFiles
 }
@@ -943,6 +960,9 @@ const getFilesToLoadFilterEnding = (relativePath: string, ending: string, fs: an
     let vanillaFiles = fs.readdirSync(`${projectDetails.paths.vanillaDir}/${relativePath}`, 'utf8').filter((name: string) => name.match(filterRegex)).filter((name: string) => !overwriteFiles.includes(name))
     overwriteFiles = overwriteFiles.map((name: string) => `${projectDetails.paths.projectDir}/${relativePath}/${name}`)
     vanillaFiles = vanillaFiles.map((name: string) => `${projectDetails.paths.vanillaDir}/${relativePath}/${name}`)
+    if(projectDetails.projectFiles.overrideFile.overridePaths.includes(relativePath)){
+        vanillaFiles = []
+    }
     let returnFiles = [...overwriteFiles,...vanillaFiles]
     return returnFiles
 }

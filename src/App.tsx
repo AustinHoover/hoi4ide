@@ -16,6 +16,7 @@ import Maps from './pages/maps/maps';
 import Debug from './pages/debug/debug';
 import { AppConfig } from './AppConfig';
 import Project from './pages/project/project';
+import MassEdit from './pages/massedit/massedit';
 
 export const AppContext = React.createContext(initialContext);
 
@@ -50,6 +51,7 @@ function App(props: AppProperties) {
             <Route path="/createcharacter" element={<CreateCharacter/>}/>
             <Route path="/createunit" element={<CreateUnit/>}/>
             <Route path="/project" element={<Project/>}/>
+            <Route path="/massedit" element={<MassEdit/>}/>
             <Route path="/map" element={<Maps/>}/>
             <Route path="/debug" element={<Debug/>}/>
           </Routes>

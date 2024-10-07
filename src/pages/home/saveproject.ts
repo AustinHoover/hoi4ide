@@ -76,7 +76,11 @@ export const saveProjectData = async (context: AppContextInterface) => {
         if(historyFile){
             let loadedOwnerScope: Scope | undefined = historyFile.state.history.scopes.find(scope => scope.name === "owner")
             if(loadedOwnerScope){
-                loadedOwnerScope.object = state.ownerTag
+                if(state.ownerTag && state.ownerTag !== ''){
+                    loadedOwnerScope.object = state.ownerTag
+                } else {
+                    historyFile.state.history.scopes = historyFile.state.history.scopes.filter(scope => scope.name !== 'owner')
+                }
             }
         } else {
             throw new Error("Saving new states not implemented yet")

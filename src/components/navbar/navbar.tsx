@@ -27,6 +27,9 @@ const Navbar = () => {
                 <div className="nav-item">
                     <Link className="nav-link" to="/characters">Characters</Link>
                 </div>
+                <div className="nav-item">
+                    <Link className="nav-link" to="/massedit">Bulk</Link>
+                </div>
                 {
                     //still in dev
                     // state.appDetails.debug && 
