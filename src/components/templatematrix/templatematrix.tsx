@@ -4,7 +4,6 @@ import { AppContext } from "../../App";
 import { CharacterProperties, DivisionTemplate, UnitHistoryFile } from "../../interface/rawFile.interface";
 import { createActionOpenCharacter, createActionOpenCountry, createActionOpenState } from "../../state/mainState.actions";
 import { AppContextInterface, Character, Country } from "../../state/mainState.interface";
-import GenericDropdown, { loseFocusContainer } from "../dropdowngeneric/dropdowngeneric";
 import ImageDisplay from "../imagedisplay/imagedisplay";
 
 import "./templatematrix.css"
@@ -78,7 +77,7 @@ const TemplateMatrix = (props: TemplateMatrixProps) => {
                 </div>)
             }
         })
-        columns.push(<div style={{display: "flex", flexDirection: "column"}}>
+        columns.push(<div style={{display: "flex", flexDirection: "column"}} key={'col' + x}>
             {columnToRender}
         </div>)
     })

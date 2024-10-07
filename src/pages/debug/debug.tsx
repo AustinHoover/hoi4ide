@@ -5,7 +5,6 @@ import { AppContext } from "../../App";
 import CountryEdit from "../../components/countryedit/countryedit";
 import CountryEditTabs from "../../components/countryedittabs/countryedittabs";
 import CountrySearch from "../../components/countrysearch/countrysearch";
-import GenericDropdown, { loseFocusContainer } from "../../components/dropdowngeneric/dropdowngeneric";
 import Navbar from "../../components/navbar/navbar";
 import ScopeEdit from "../../components/scopeedit/scopeedit";
 import { CountryFile, HistoryCountryFile, TagFile, UnitHistoryFile } from "../../interface/rawFile.interface";

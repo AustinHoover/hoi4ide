@@ -4,7 +4,7 @@ import { AppContext } from "../../App";
 import { CharacterProperties, UnitHistoryFile } from "../../interface/rawFile.interface";
 import { createActionOpenCharacter, createActionOpenCountry, createActionOpenState } from "../../state/mainState.actions";
 import { AppContextInterface, Character, Country } from "../../state/mainState.interface";
-import GenericDropdown, { loseFocusContainer } from "../dropdowngeneric/dropdowngeneric";
+import GenericDropdown from "../dropdowngeneric/dropdowngeneric";
 
 import "./unitedit.css"
 
@@ -39,7 +39,6 @@ const UnitEdit = (props: UnitEditProps) => {
         setCurrentFile(file)
         return file
     }
-    let onLoseFocusContainer: loseFocusContainer = { }
 
     let unitsWidget: JSX.Element[] = []
 
@@ -63,7 +62,7 @@ const UnitEdit = (props: UnitEditProps) => {
                     <div style={{display: "flex", flexDirection: "column", alignItems: "start"}}>
                         <span>Name: {unit.name ? unit.name : unit.division_name?.name_order}</span>
                         <span>Location: {unit.location}</span>
-                        <span style={{display: "flex", flexDirection: "row", alignItems: "center"}}>Template: <GenericDropdown options={templates} onSelect={selectTemplate} loseFocusContainer={onLoseFocusContainer} initialValue={unit.division_template}/></span>
+                        <span style={{display: "flex", flexDirection: "row", alignItems: "center"}}>Template: <GenericDropdown options={templates} onSelect={selectTemplate} initialValue={unit.division_template}/></span>
                     </div>
                 </div>)
             })
@@ -71,15 +70,9 @@ const UnitEdit = (props: UnitEditProps) => {
     }
 
     return (
-        <div className="w-100 h-100"
-        onClick={($event) => {
-            if(onLoseFocusContainer.onLoseFocus){
-                onLoseFocusContainer.onLoseFocus($event)
-            }
-        }}
-        >
+        <div className="w-100 h-100">
             <div style={{display: "flex", flexDirection: "row", justifyContent: "center"}}>
-                <GenericDropdown options={fileOptions} onSelect={selectFile} loseFocusContainer={onLoseFocusContainer}/>
+                <GenericDropdown options={fileOptions} onSelect={selectFile}/>
             </div>
             <div style={{display: "flex", flexDirection: "row", flexWrap: "wrap", overflow: "auto"}}>
                 {unitsWidget}

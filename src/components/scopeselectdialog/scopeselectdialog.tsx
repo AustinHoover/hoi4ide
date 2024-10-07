@@ -5,7 +5,7 @@ import { effectDefinitions } from "../../pdxapi/effectDefinitions";
 import { triggerDefinitions } from "../../pdxapi/triggerDefinitions";
 import { createActionOpenCountry } from "../../state/mainState.actions";
 import { AppContextInterface, Country } from "../../state/mainState.interface";
-import GenericDropdown, { loseFocusContainer } from "../dropdowngeneric/dropdowngeneric";
+import GenericDropdown from "../dropdowngeneric/dropdowngeneric";
 
 import "./scopeselectdialog.css"
 
@@ -24,9 +24,6 @@ const ScopeSelectDialogComponent = (props: ScopeSelectDialogComponentProps) => {
     const state = context.state
     const dispatch = context.dispatch
 
-    let onLoseFocusEffectContainer: loseFocusContainer = { }
-    let onLoseFocusTriggerContainer: loseFocusContainer = { }
-
     let saveButtonCallback = () => {
         props.onSave("test")
         props.setShow(false)
@@ -44,14 +41,6 @@ const ScopeSelectDialogComponent = (props: ScopeSelectDialogComponentProps) => {
             { props.show &&
                 <div className="modal show" tabIndex={-1} role="dialog" 
                 style={{ display: 'block', position: 'fixed', zIndex: 999, top: "300px" }}
-                onClick={($event) => {
-                    if(onLoseFocusEffectContainer.onLoseFocus){
-                        onLoseFocusEffectContainer.onLoseFocus($event)
-                    }
-                    if(onLoseFocusTriggerContainer.onLoseFocus){
-                        onLoseFocusTriggerContainer.onLoseFocus($event)
-                    }
-                }}
                 >
                     <div className="modal-dialog" role="document">
                         <div className="modal-content">
@@ -60,9 +49,9 @@ const ScopeSelectDialogComponent = (props: ScopeSelectDialogComponentProps) => {
                             </div>
                             <div className="modal-body">
                                 <p>Effects</p>
-                                <GenericDropdown options={effectNameList} onSelect={selectEffectCallback} loseFocusContainer={onLoseFocusEffectContainer} displayLimit={5}/>
+                                <GenericDropdown options={effectNameList} onSelect={selectEffectCallback} displayLimit={5}/>
                                 <p>Triggers</p>
-                                <GenericDropdown options={triggerNameList} onSelect={selectEffectCallback} loseFocusContainer={onLoseFocusTriggerContainer} displayLimit={5}/>
+                                <GenericDropdown options={triggerNameList} onSelect={selectEffectCallback} displayLimit={5}/>
                             </div>
                             <div className="modal-footer">
                                 <button type="button" className="btn btn-primary" onClick={saveButtonCallback}>Save</button>

@@ -5,7 +5,7 @@ import { AppContext } from "../../App";
 import CountryEdit from "../../components/countryedit/countryedit";
 import CountryEditTabs from "../../components/countryedittabs/countryedittabs";
 import CountrySearch from "../../components/countrysearch/countrysearch";
-import GenericDropdown, { loseFocusContainer } from "../../components/dropdowngeneric/dropdowngeneric";
+import GenericDropdown from "../../components/dropdowngeneric/dropdowngeneric";
 import ImageInput from "../../components/imageinput/imageinput";
 import Navbar from "../../components/navbar/navbar";
 import ScopeEdit from "../../components/scopeedit/scopeedit";
@@ -115,8 +115,6 @@ const CreateCountry = () => {
     const state = context.state
     const dispatch = context.dispatch
 
-    let onLoseFocusContainer: loseFocusContainer = { }
-
     let [page,setPage] = React.useState(0)
     let [name,setName] = React.useState("")
     let [tag,setTag] = React.useState("")
@@ -180,11 +178,7 @@ const CreateCountry = () => {
     
 
     return (
-        <div className="h-100" onClick={(event)=>{
-            if(onLoseFocusContainer.onLoseFocus){
-                onLoseFocusContainer.onLoseFocus(event)
-            }
-        }}>
+        <div className="h-100">
             <Navbar/>
             <div className="container p-0 m-0 h-100">
             {
@@ -198,7 +192,7 @@ const CreateCountry = () => {
                         <span>Culture Graphics</span>
                         <GenericDropdown options={graphicsCultures} 
                         onSelect={(option: string)=>{setGraphics(option);return option}} 
-                        loseFocusContainer={onLoseFocusContainer}/>
+                        />
                         <span>Color</span>
                         <HexColorPicker color={color} onChange={setColor}/>
                         <button className="btn btn-success mt-3" onClick={()=>{setPage(1)}}>Next</button>

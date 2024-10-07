@@ -1,32 +1,45 @@
 import * as React from "react";
-import { useNavigate } from "react-router-dom";
-import { AppContext } from "../../App";
-import { createActionOpenCountry } from "../../state/mainState.actions";
-import { AppContextInterface, Country } from "../../state/mainState.interface";
 
 import "./dropdowngeneric.css"
+import { ChangeEvent } from "react";
 
-export interface loseFocusContainer {
-    onLoseFocus?: (event: any) => void,
-}
-
+/**
+ * Dropdown props
+ */
 export interface GenericDropdownProps {
+
+    /**
+     * The options for the dropdown
+     */
     options: string[],
+
+    /**
+     * An optional callback that fires when the dropdown changes value
+     * @param option The option that was selected
+     */
     onSelect: (option: string) => string,
-    loseFocusContainer: loseFocusContainer,
+
+    /**
+     * The initial value of the dropdown
+     */
     initialValue?: string,
+
+    /**
+     * The maximum number of options to display at once
+     */
     displayLimit?: number,
+
+    /**
+     * The overflow behavior for the dropdown options
+     */
     overflow?: boolean,
 }
 
+/**
+ * A generic dropdown
+ */
 const GenericDropdown = (props: GenericDropdownProps) => {
 
-    const context: AppContextInterface = React.useContext(AppContext);
-    const state = context.state
-    const dispatch = context.dispatch
-
-    let [showDropdownChildren, setShowDropdownChildren] = React.useState(false)
-    let [filterString, setFilterString] = React.useState("")
     let [value, setValue] = React.useState("")
 
     React.useEffect(()=>{
@@ -35,59 +48,47 @@ const GenericDropdown = (props: GenericDropdownProps) => {
         }
     },[props.initialValue])
 
-    props.loseFocusContainer.onLoseFocus = () => {
-        setShowDropdownChildren(false)
-    }
-
-    let openDropdown = (event: React.SyntheticEvent) => {
-        setShowDropdownChildren(true)
-        event.stopPropagation()
-    }
-
 
     let optionsToInclude: string[] = []
-    optionsToInclude = props.options.filter(option => option.toLocaleLowerCase().includes(filterString))
+    optionsToInclude = props.options
     if(props.displayLimit && optionsToInclude.length > props.displayLimit){
         optionsToInclude.length = props.displayLimit
     }
 
-    let filterFunction = (input: any) => {
-        // let newString = filterString
-        // if(input.key === "Backspace"){
-        //     if(newString.length > 0){
-        //         newString = newString.substring(0,newString.length - 1)
-        //     }
-        // } else {
-        //     newString = newString + input.key
-        // }
-        setFilterString(input.target.value)
-        optionsToInclude = props.options.filter(option => option.toLocaleLowerCase().includes(filterString))
+    let onChange = (input: ChangeEvent<HTMLSelectElement>) => {
+        const value: string | null = input.target.value
+        optionsToInclude = props.options
         if(props.displayLimit && optionsToInclude.length > props.displayLimit){
             optionsToInclude.length = props.displayLimit
         }
+        if(!!props.onSelect){
+            props.onSelect(value)
+        }
+        setValue(value)
     }
 
     let contents: JSX.Element[] = []
     optionsToInclude.forEach((option,i) => {
         contents.push(
-            <a className="dropdown-item" key={option + "-" + i} 
+            <option className="dropdown-item" key={option + "-" + i} 
             style={{overflow: props.overflow ? "auto" : ""}}
-            onClick={(event) => {
-                props.onSelect(option)
-                setValue(option)
-                setFilterString(option)
-                event.stopPropagation()
-                setShowDropdownChildren(false)
-            }}>{option}</a>
+            >
+                {option}
+            </option>
         )
     })
     
     return (
         <div className="dropdown" style={{overflow: props.overflow ? "auto" : ""}}>
-            <input className="m-2 form-control" type="text" placeholder="Search.." id="myInput" onChange={filterFunction} onClick={openDropdown} value={filterString ? filterString : ""}/>
-            <div className={`dropdown-menu w-100 m-2 ${showDropdownChildren ? "show" : ""}`} aria-labelledby="dropdownMenuLink">
+            <select
+                className="m-2 form-control"
+                placeholder="Search.."
+                id="myInput"
+                onChange={onChange}
+                value={value}
+            >
                 {contents}
-            </div>
+            </select>
         </div>
     );
 }

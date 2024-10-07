@@ -4,7 +4,7 @@ import { AppContext } from "../../App";
 import { CharacterProperties, UnitHistoryFile } from "../../interface/rawFile.interface";
 import { createActionOpenCharacter, createActionOpenCountry, createActionOpenState } from "../../state/mainState.actions";
 import { AppContextInterface, Character, Country } from "../../state/mainState.interface";
-import GenericDropdown, { loseFocusContainer } from "../dropdowngeneric/dropdowngeneric";
+import GenericDropdown from "../dropdowngeneric/dropdowngeneric";
 import TemplateMatrix from "../templatematrix/templatematrix";
 
 import "./templateedit.css"
@@ -40,8 +40,6 @@ const TemplateEdit = (props: TemplateEditProps) => {
         setCurrentFile(file)
         return file
     }
-    let onLoseFocusContainer: loseFocusContainer = { }
-
     let templateMatrixCards: JSX.Element[] = []
 
     if(currentFile !== "" && fileMap[currentFile]){
@@ -56,15 +54,9 @@ const TemplateEdit = (props: TemplateEditProps) => {
     }
 
     return (
-        <div className="w-100 h-100"
-        onClick={($event) => {
-            if(onLoseFocusContainer.onLoseFocus){
-                onLoseFocusContainer.onLoseFocus($event)
-            }
-        }}
-        >
+        <div className="w-100 h-100">
             <div style={{display: "flex", flexDirection: "row", justifyContent: "center"}}>
-                <GenericDropdown options={fileOptions} onSelect={selectFile} loseFocusContainer={onLoseFocusContainer}/>
+                <GenericDropdown options={fileOptions} onSelect={selectFile}/>
             </div>
             <div style={{display: "flex", flexDirection: "row", flexWrap: "wrap"}}>
                 {templateMatrixCards}

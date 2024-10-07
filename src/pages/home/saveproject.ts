@@ -162,8 +162,11 @@ export const saveProjectData = async (context: AppContextInterface) => {
             if(matchingFile){
                 let unitHistoryFile: UnitHistoryFile = {
                     name: key,
-                    path: projectDetails.paths.projectDir + "/history/units/" + key + ".txt",
+                    path: projectDetails.paths.projectDir + "/history/units/" + key,
                     scopes: [],
+                }
+                if(!unitHistoryFile.path.includes(".txt")){
+                    unitHistoryFile.path = unitHistoryFile.path + ".txt"
                 }
                 let attachedInstantEffect: boolean = false
                 if(unitList.units){
