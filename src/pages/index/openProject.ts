@@ -695,6 +695,7 @@ export const openProject = async (context: AppContextInterface, projectDir: stri
             ownerTag: "",
             provinces: [],
             manpower: 0,
+            resources: { },
             historyFile: stateFile,
         }
         stateFile?.state?.history?.scopes?.forEach(scope => {
@@ -702,11 +703,26 @@ export const openProject = async (context: AppContextInterface, projectDir: stri
                 newState.ownerTag = scope.object
             }
         })
+        if(!stateFile?.state?.history){
+            stateFile.state.history = {
+                buildings: {
+                },
+                scopes: []
+            }
+        }
         if(stateFile?.state?.provinces){
             newState.provinces = stateFile?.state?.provinces
         }
         if(stateFile?.state?.manpower){
             newState.manpower = stateFile?.state?.manpower
+        }
+        if(newState.resources){
+            newState.resources.oil = stateFile?.state?.resources?.oil
+            newState.resources.aluminum = stateFile?.state?.resources?.aluminum
+            newState.resources.rubber = stateFile?.state?.resources?.rubber
+            newState.resources.tungsten = stateFile?.state?.resources?.tungsten
+            newState.resources.steel = stateFile?.state?.resources?.steel
+            newState.resources.chromium = stateFile?.state?.resources?.chromium
         }
         projectDetails.stateEditing.states.push(newState)
     })

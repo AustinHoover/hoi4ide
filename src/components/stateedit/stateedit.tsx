@@ -98,6 +98,12 @@ const StateEdit = (props: StateEditProps) => {
     const [edited,setEdited] = React.useState<boolean>(false)
     const [owner,setOwner] = React.useState<DropdownOption>(initialOwner)
     const [manpower,setManpower] = React.useState<number>(currentState.manpower)
+    const [oil,setOil] = React.useState<number>(currentState?.resources?.oil ? currentState?.resources?.oil : 0)
+    const [aluminum,setAluminum] = React.useState<number>(currentState?.resources?.aluminum ? currentState?.resources?.aluminum : 0)
+    const [rubber,setRubber] = React.useState<number>(currentState?.resources?.rubber ? currentState?.resources?.rubber : 0)
+    const [tungsten,setTungsten] = React.useState<number>(currentState?.resources?.tungsten ? currentState?.resources?.tungsten : 0)
+    const [steel,setSteel] = React.useState<number>(currentState?.resources?.steel ? currentState?.resources?.steel : 0)
+    const [chromium,setChromium] = React.useState<number>(currentState?.resources?.chromium ? currentState?.resources?.chromium : 0)
 
     //fires on selecting a province
     const onSelectProvince = (value: any) => {
@@ -106,9 +112,11 @@ const StateEdit = (props: StateEditProps) => {
     }
 
     //fires on editing manpower
-    const onEditManpower = (event: any) => {
-        setManpower(+event.target.value)
-        setEdited(true)
+    const onEditNumeric = (dispatchFunc: React.Dispatch<any>) => {
+        return (event: any) => {
+            dispatchFunc(+event.target.value)
+            setEdited(true)
+        }
     }
 
     //saves all mutations made on the page
@@ -120,6 +128,14 @@ const StateEdit = (props: StateEditProps) => {
         })
 
         currentState.manpower = manpower
+        if(currentState.resources){
+            currentState.resources.oil = oil
+            currentState.resources.aluminum = aluminum
+            currentState.resources.rubber = rubber
+            currentState.resources.tungsten = tungsten
+            currentState.resources.steel = steel
+            currentState.resources.chromium = chromium
+        }
 
         dispatch(createActionEditState({...state}))
         setEdited(false)
@@ -127,20 +143,16 @@ const StateEdit = (props: StateEditProps) => {
 
     return (
         <div className="w-100 h-100">
-            <div className="card shadow m-3"
-            style={{
-                minHeight: '50%'
-            }}
-            >
+            <div className="card shadow m-3">
                 <div style={{display:"flex", flexDirection:"row", justifyContent: "space-between"}}>
                     <div style={{fontSize: "30px", padding: "30px"}}>{state.projectDetails.localisationMap[currentState.name]} ({currentState.name})</div>
                     <button type="button" className="btn-close" aria-label="Close" style={{margin: "15px", padding: "15px", backgroundColor: "#F00"}} onClick={()=>{dispatch(createActionOpenState(null))}}></button>
                 </div>
 
 
-                <div className="row row-cols-1 row-cols-md-3 g-4 flex-grow-1">
+                <div className="row row-cols-1 row-cols-md-3 g-4">
 
-                    <div className="owneredit col p-3">
+                    <div className="col p-3 mt-0 owneredit">
                         <div className="p-3 h-100">
                             <GenericDropdown
                                 options={allOwnerOptions}
@@ -151,13 +163,91 @@ const StateEdit = (props: StateEditProps) => {
                         </div>
                     </div>
 
-                    <div className="provinceedit col p-3">
+                    <div className="col p-3 mt-0 provinceedit">
                         <div className="p-3 h-100">
                             <GenericDropdown options={provinceOptions} onChange={onSelectProvince} value={provinces} isMulti={true} label="Provinces"/>
                         </div>
                     </div>
 
-                    <div className="miscedit col p-3">
+                    <div className="col p-3 mt-0 oiledit">
+                        <div className="p-3 h-100 form-group">
+                            <label htmlFor="manpowerInput">Oil</label>
+                            <input
+                                id="manpowerInput"
+                                type="number"
+                                className="form-control"
+                                value={oil}
+                                onChange={onEditNumeric(setOil)}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="col p-3 mt-0 aluminumedit">
+                        <div className="p-3 h-100 form-group">
+                            <label htmlFor="manpowerInput">Aluminum</label>
+                            <input
+                                id="manpowerInput"
+                                type="number"
+                                className="form-control"
+                                value={aluminum}
+                                onChange={onEditNumeric(setAluminum)}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="col p-3 mt-0 rubberedit">
+                        <div className="p-3 h-100 form-group">
+                            <label htmlFor="manpowerInput">Rubber</label>
+                            <input
+                                id="manpowerInput"
+                                type="number"
+                                className="form-control"
+                                value={rubber}
+                                onChange={onEditNumeric(setRubber)}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="col p-3 mt-0 tungstenedit">
+                        <div className="p-3 h-100 form-group">
+                            <label htmlFor="manpowerInput">Tungsten</label>
+                            <input
+                                id="manpowerInput"
+                                type="number"
+                                className="form-control"
+                                value={tungsten}
+                                onChange={onEditNumeric(setTungsten)}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="col p-3 mt-0 steeledit">
+                        <div className="p-3 h-100 form-group">
+                            <label htmlFor="manpowerInput">Steel</label>
+                            <input
+                                id="manpowerInput"
+                                type="number"
+                                className="form-control"
+                                value={steel}
+                                onChange={onEditNumeric(setSteel)}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="col p-3 mt-0 chromiumedit">
+                        <div className="p-3 h-100 form-group">
+                            <label htmlFor="manpowerInput">Chromium</label>
+                            <input
+                                id="manpowerInput"
+                                type="number"
+                                className="form-control"
+                                value={chromium}
+                                onChange={onEditNumeric(setChromium)}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="col p-3 mt-0 manpoweredit">
                         <div className="p-3 h-100 form-group">
                             <label htmlFor="manpowerInput">Manpower</label>
                             <input
@@ -165,10 +255,11 @@ const StateEdit = (props: StateEditProps) => {
                                 type="number"
                                 className="form-control"
                                 value={manpower}
-                                onChange={onEditManpower}
+                                onChange={onEditNumeric(setManpower)}
                             />
                         </div>
                     </div>
+
                 </div>
 
 

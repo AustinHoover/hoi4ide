@@ -206,9 +206,50 @@ export interface State {
     manpower: number,
 
     /**
+     * Resources in the state
+     */
+    resources?: StateResources,
+
+    /**
      * The history file associated with the state object
      */
     historyFile: HistoryStateFile,
+}
+
+/**
+ * Resources in the state
+ */
+export interface StateResources {
+
+    /**
+     * Oil amount
+     */
+    oil?: number,
+
+    /**
+     * Aluminum amount
+     */
+    aluminum?: number,
+
+    /**
+     * Rubber amount
+     */
+    rubber?: number,
+
+    /**
+     * Tungsten amount
+     */
+    tungsten?: number,
+
+    /**
+     * Steel amount
+     */
+    steel?: number,
+
+    /**
+     * Chromium amount
+     */
+    chromium?: number,
 }
 
 export interface CharacterEditing {

@@ -149,10 +149,10 @@ export interface StateHistory extends ScopeableObject {
 }
 
 export interface Buildings {
-    infrastructure: number,
-    arms_factory: number,
-    industrial_complex: number,
-    air_base: number,
+    infrastructure?: number,
+    arms_factory?: number,
+    industrial_complex?: number,
+    air_base?: number,
 }
 
 //
