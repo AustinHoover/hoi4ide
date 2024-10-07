@@ -598,7 +598,7 @@ export const openProject = async (context: AppContextInterface, projectDir: stri
         leaderPortraits.forEach(path => {
             let data = fs.readFileSync(path, null)
             let portraitFile: CharacterPortraitFile = {
-                data: data,
+                data: new Uint8Array(data),
                 path: path,
             }
             projectFiles.portraitFiles.push(portraitFile)

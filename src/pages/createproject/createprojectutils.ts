@@ -76,9 +76,9 @@ export const createProjectStructure = async (context: AppContextInterface, proje
                 fs.writeFileSync(`${homedir}${exportDirStart}${modFileName}.mod`,`
 name="${context.state.projectDetails.metadata.name}"
 path="mod/${modFileName}"
-tags={}
+tags={"Graphics"}
 picture="thumbnail.png"
-supported_version="1.12.*"`)
+supported_version="1.14.*"`)
                 //project structure
                 constructFolderStructure(projectDir)
                 saveProject(projectDir)
