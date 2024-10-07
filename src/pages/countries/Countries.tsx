@@ -60,7 +60,7 @@ const Countries = () => {
                 } else {
                     content = <div>No unit files found..</div>
                 }
-            }
+            } break
         }
     } else {
         content = <CountrySearch/>

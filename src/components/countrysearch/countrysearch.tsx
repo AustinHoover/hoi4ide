@@ -5,6 +5,7 @@ import { createActionOpenCountry } from "../../state/mainState.actions";
 import { AppContextInterface, Country } from "../../state/mainState.interface";
 
 import "./countrysearch.css"
+import GenericDropdown from "../dropdowngeneric/dropdowngeneric";
 
 
 export interface CountrySearchProps {
@@ -19,41 +20,24 @@ const CountrySearch = (props: CountrySearchProps) => {
     const state = context.state
     const dispatch = context.dispatch
 
-    let [showDropdownChildren, setShowDropdownChildren] = React.useState(false)
-    let [filterString, setFilterString] = React.useState("")
+    const countries = state.projectDetails.countryEditing.countries
+    const names: string[] = countries.map(country => state.projectDetails.localisationMap[country.tag])
 
-    let countriesToInclude: Country[] = []
-    countriesToInclude = state.projectDetails.countryEditing.countries.filter(country => country.tag && (country.tag.toLocaleLowerCase().includes(filterString) || state.projectDetails.localisationMap[country.tag].toLocaleLowerCase().includes(filterString)))
-    if(countriesToInclude.length > 5){
-        countriesToInclude.length = 5
-    }
-
-    let filterFunction = (input: any) => {
-        setFilterString(input.target.value)
-        countriesToInclude = state.projectDetails.countryEditing.countries.filter(country => country.tag && (country.tag.toLocaleLowerCase().includes(filterString) || state.projectDetails.localisationMap[country.tag].toLocaleLowerCase().includes(filterString)))
-        if(countriesToInclude.length > 5){
-            countriesToInclude.length = 5
+    const onSelect = (value: string) => {
+        const country: Country | undefined = countries.find(country => state.projectDetails.localisationMap[country.tag] === value)
+        console.log(country)
+        if(country){
+            dispatch(createActionOpenCountry(country))
         }
+        return value
     }
-
-    let contents: JSX.Element[] = []
-    countriesToInclude.forEach(country => {
-        contents.push(
-            <a className="dropdown-item" key={country.tag} onClick={(event) => {
-                dispatch(createActionOpenCountry(country))
-            }}>{state.projectDetails.localisationMap[country.tag]} ({country.tag})</a>
-        )
-    })
     
     return (
         <div className="dropdown mb-5 w-50">
-            {/* <a className="btn btn-secondary dropdown-toggle" onClick={()=>{setShowDropdownChildren(!showDropdownChildren)}}>
-                Dropdown link
-            </a> */}
-            <input className="m-2 form-control" type="text" placeholder="Search.." id="myInput" onKeyUp={filterFunction} onClick={()=>{setShowDropdownChildren(true)}}/>
-            <div className={`dropdown-menu w-100 m-2 ${showDropdownChildren ? "show" : ""}`} aria-labelledby="dropdownMenuLink">
-                {contents}
-            </div>
+            <GenericDropdown
+                options={names}
+                onSelect={onSelect}
+            />
         </div>
     );
 }

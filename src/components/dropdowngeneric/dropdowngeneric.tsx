@@ -51,8 +51,8 @@ const GenericDropdown = (props: GenericDropdownProps) => {
         }
     }) as any
 
-    let onChange = (newValue: SingleValue<string>, actionMeta: ActionMeta<string>) => {
-        const value: string = newValue ? newValue : ''
+    let onChange = (newValue: any, actionMeta: ActionMeta<string>) => {
+        const value = newValue?.value ? newValue.value : ''
         if(!!props.onSelect){
             props.onSelect(value)
         }
