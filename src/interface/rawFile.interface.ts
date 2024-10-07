@@ -138,7 +138,7 @@ export interface StateObject {
     name: string,
     manpower: number,
     resources?: any,
-    state_category: string,
+    state_category: "wasteland" | "enclave" | "tiny_island" | "pastoral" | "small_island" | "rural" | "town" | "large_town" | "city" | "large_city" | "metropolis" | "megalopolis",
     history: StateHistory,
     provinces: number[],
     local_supplies: number,

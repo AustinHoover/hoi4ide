@@ -696,6 +696,7 @@ export const openProject = async (context: AppContextInterface, projectDir: stri
             provinces: [],
             manpower: 0,
             resources: { },
+            category: "rural",
             historyFile: stateFile,
         }
         stateFile?.state?.history?.scopes?.forEach(scope => {
@@ -724,6 +725,7 @@ export const openProject = async (context: AppContextInterface, projectDir: stri
             newState.resources.steel = stateFile?.state?.resources?.steel
             newState.resources.chromium = stateFile?.state?.resources?.chromium
         }
+        newState.category = stateFile?.state?.state_category as any
         projectDetails.stateEditing.states.push(newState)
     })
     //discover characters

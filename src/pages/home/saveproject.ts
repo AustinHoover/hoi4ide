@@ -5,6 +5,7 @@ import { isVanillaPath, serializeArbitraryPDXObject } from "../../util/Utils";
 import { createActionLoadProject, createActionSetExportDir, createActionSetLoading } from "../../state/mainState.actions";
 import { ipcRenderer } from "electron";
 import { Scope } from "../../interface/scope.interface";
+import { SCOPE_TYPE } from "../../pdxapi/scopeDefinitions";
 
 
 
@@ -82,6 +83,14 @@ export const saveProjectData = async (context: AppContextInterface) => {
                 } else {
                     historyFile.state.history.scopes = historyFile.state.history.scopes.filter(scope => scope.name !== 'owner')
                 }
+            } else {
+                if(state.ownerTag && state.ownerTag !== ''){
+                    historyFile.state?.history?.scopes.push({
+                        name: 'owner',
+                        object: state.ownerTag,
+                        type: SCOPE_TYPE.STATE,
+                    })
+                }
             }
             //set provinces
             if(state.provinces && state.provinces.length > 0){
@@ -90,6 +99,8 @@ export const saveProjectData = async (context: AppContextInterface) => {
             if(state.manpower){
                 historyFile.state.manpower = state.manpower
             }
+            historyFile.state.resources = state.resources
+            historyFile.state.state_category = state.category
         } else {
             throw new Error("Saving new states not implemented yet")
         }

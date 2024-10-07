@@ -211,6 +211,11 @@ export interface State {
     resources?: StateResources,
 
     /**
+     * The category of the state
+     */
+    category: "wasteland" | "enclave" | "tiny_island" | "pastoral" | "small_island" | "rural" | "town" | "large_town" | "city" | "large_city" | "metropolis" | "megalopolis",
+
+    /**
      * The history file associated with the state object
      */
     historyFile: HistoryStateFile,

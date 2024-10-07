@@ -32,6 +32,60 @@ for(let i = 0; i < MAX_PROVINCES; i++){
 }
 
 /**
+ * Options for state category
+ */
+const CATEGORY_OPTIONS: DropdownOption[] = [
+    {
+        label: "wasteland",
+        value: "wasteland"
+    },
+    {
+        label: "enclave",
+        value: "enclave"
+    },
+    {
+        label: "tiny_island",
+        value: "tiny_island"
+    },
+    {
+        label: "pastoral",
+        value: "pastoral"
+    },
+    {
+        label: "small_island",
+        value: "small_island"
+    },
+    {
+        label: "rural",
+        value: "rural"
+    },
+    {
+        label: "town",
+        value: "town"
+    },
+    {
+        label: "large_town",
+        value: "large_town"
+    },
+    {
+        label: "city",
+        value: "city"
+    },
+    {
+        label: "large_city",
+        value: "large_city"
+    },
+    {
+        label: "metropolis",
+        value: "metropolis"
+    },
+    {
+        label: "megalopolis",
+        value: "megalopolis"
+    },
+]
+
+/**
  * State to display on error
  */
 const errorState: State = {
@@ -40,6 +94,7 @@ const errorState: State = {
     ownerTag: "ERR",
     provinces: [],
     manpower: 0,
+    category: 'rural',
     historyFile: {
         path: "",
         state: {
@@ -47,7 +102,7 @@ const errorState: State = {
             name: "ERR",
             manpower: 0,
             local_supplies: 0,
-            state_category: "",
+            state_category: "rural",
             history: {
                 scopes: [],
                 buildings: {
@@ -104,17 +159,20 @@ const StateEdit = (props: StateEditProps) => {
     const [tungsten,setTungsten] = React.useState<number>(currentState?.resources?.tungsten ? currentState?.resources?.tungsten : 0)
     const [steel,setSteel] = React.useState<number>(currentState?.resources?.steel ? currentState?.resources?.steel : 0)
     const [chromium,setChromium] = React.useState<number>(currentState?.resources?.chromium ? currentState?.resources?.chromium : 0)
+    const [category,setCategory] = React.useState<DropdownOption>({label: currentState.category,value: currentState.category,})
 
-    //fires on selecting a province
-    const onSelectProvince = (value: any) => {
-        setProvinces(value)
-        setEdited(true)
-    }
-
-    //fires on editing manpower
+    //fires on editing a numeric field
     const onEditNumeric = (dispatchFunc: React.Dispatch<any>) => {
         return (event: any) => {
             dispatchFunc(+event.target.value)
+            setEdited(true)
+        }
+    }
+
+    //fires on selecting a value from a dropdown
+    const onEditSelect = (dispatchFunc: React.Dispatch<any>) => {
+        return (value: any) => {
+            dispatchFunc(value)
             setEdited(true)
         }
     }
@@ -137,6 +195,9 @@ const StateEdit = (props: StateEditProps) => {
             currentState.resources.chromium = chromium
         }
 
+        currentState.ownerTag = owner?.value
+        currentState.category = category.value
+
         dispatch(createActionEditState({...state}))
         setEdited(false)
     }
@@ -157,15 +218,16 @@ const StateEdit = (props: StateEditProps) => {
                             <GenericDropdown
                                 options={allOwnerOptions}
                                 value={owner}
-                                onChange={setOwner}
+                                onChange={onEditSelect(setOwner)}
                                 label="Owner"
+                                isClearable={true}
                             />
                         </div>
                     </div>
 
                     <div className="col p-3 mt-0 provinceedit">
                         <div className="p-3 h-100">
-                            <GenericDropdown options={provinceOptions} onChange={onSelectProvince} value={provinces} isMulti={true} label="Provinces"/>
+                            <GenericDropdown options={provinceOptions} onChange={onEditSelect(setProvinces)} value={provinces} isMulti={true} label="Provinces"/>
                         </div>
                     </div>
 
@@ -257,6 +319,12 @@ const StateEdit = (props: StateEditProps) => {
                                 value={manpower}
                                 onChange={onEditNumeric(setManpower)}
                             />
+                        </div>
+                    </div>
+
+                    <div className="col p-3 mt-0 categoryedit">
+                        <div className="p-3 h-100">
+                            <GenericDropdown options={CATEGORY_OPTIONS} onChange={onEditSelect(setCategory)} value={category} label="Category"/>
                         </div>
                     </div>
 
