@@ -1,11 +1,30 @@
 import { Scope } from "./scope.interface"
 
-//
-//config file
-//
+/**
+ * The config file for the overall project
+ */
 export interface ConfigFile {
+
+    /**
+     * The directory to export to
+     */
     exportDir: string,
+
+    /**
+     * The name of the project
+     */
     name: string,
+}
+
+/**
+ * The file that contains all paths that are being overwritten by the project
+ */
+export interface OverrideFile {
+
+    /**
+     * All paths being overwritten by the project
+     */
+    overridePaths: string[]
 }
 
 //

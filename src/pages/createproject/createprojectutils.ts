@@ -69,16 +69,22 @@ export const createProjectStructure = async (context: AppContextInterface, proje
                 //config file
                 let fileContent: string = JSON.stringify({exportDir:`${homedir}${exportDirStart}${modFileName}`,name:context.state.projectDetails.metadata.name})
                 fs.writeFileSync(`${projectDir}/project.json`,fileContent)
+                //override file
+                fs.writeFileSync(`${projectDir}/overrides.json`,"{\n\t\"overridePaths\": []\n}")
                 //export folder and context
                 if (!fs.existsSync(`${homedir}${exportDirStart}${modFileName}`)){
                     fs.mkdirSync(`${homedir}${exportDirStart}${modFileName}`);
                 }
-                fs.writeFileSync(`${homedir}${exportDirStart}${modFileName}.mod`,`
+                let content: string = `
 name="${context.state.projectDetails.metadata.name}"
 path="mod/${modFileName}"
 tags={"Graphics"}
 picture="thumbnail.png"
-supported_version="1.14.*"`)
+supported_version="1.14.*"`
+                context.state.projectDetails.projectFiles.overrideFile.overridePaths.forEach(overriddenPath => {
+                    content = content + "replace_path  = \"" + overriddenPath + "\"\n"
+                })
+                fs.writeFileSync(`${homedir}${exportDirStart}${modFileName}.mod`,content)
                 //project structure
                 constructFolderStructure(projectDir)
                 saveProject(projectDir)

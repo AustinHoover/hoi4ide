@@ -1,5 +1,5 @@
 import { CharacterProperties } from "../interface/rawFile.interface"
-import { AppDispatchActionType, Character, Country, MainStateAction, ProjectDetails, ProjectFiles, State, Unit } from "./mainState.interface"
+import { AppDispatchAction, AppDispatchActionType, AppState, Character, Country, MainStateAction, ProjectDetails, ProjectFiles, State, Unit } from "./mainState.interface"
 
 export const createActionSetLoading = (isLoading: boolean): MainStateAction => {
     return {
@@ -60,56 +60,56 @@ export const createActionSetMetadataName = (name: string): MainStateAction => {
     }
 }
 
-export const createActionOpenCharacter = (character: Character | null) => {
+export const createActionOpenCharacter = (character: Character | null): AppDispatchAction => {
     return {
         type: AppDispatchActionType.SET_CHARACTER_TO_EDIT,
         value: character,
     }
 }
 
-export const createActionSetCountryEditTab = (tab: number) => {
+export const createActionSetCountryEditTab = (tab: number): AppDispatchAction => {
     return {
         type: AppDispatchActionType.SET_COUNTRY_EDIT_TAB,
         value: tab,
     }
 }
 
-export const createActionSetCountryScopeFileIndex = (index: number) => {
+export const createActionSetCountryScopeFileIndex = (index: number): AppDispatchAction => {
     return {
         type: AppDispatchActionType.SET_COUNTRY_SCOPE_FILE_INDEX,
         value: index,
     }
 }
 
-export const createActionAddCharacter = (character: Character) => {
+export const createActionAddCharacter = (character: Character): AppDispatchAction => {
     return {
         type: AppDispatchActionType.ADD_CHARACTER,
         value: character,
     }
 }
 
-export const createActionDeleteCharacter = (character: Character) => {
+export const createActionDeleteCharacter = (character: Character): AppDispatchAction => {
     return {
         type: AppDispatchActionType.DELETE_CHARACTER,
         value: character,
     }
 }
 
-export const createActionAddUnit = (unit: Unit) => {
+export const createActionAddUnit = (unit: Unit): AppDispatchAction => {
     return {
         type: AppDispatchActionType.ADD_UNIT,
         value: unit
     }
 }
 
-export const createActionDeleteUnit = (unit: Unit) => {
+export const createActionDeleteUnit = (unit: Unit): AppDispatchAction => {
     return {
         type: AppDispatchActionType.DELETE_UNIT,
         value: unit
     }
 }
 
-export const createActionSetImgData = (imgData: ImageData, heightmap: number[][]) => {
+export const createActionSetImgData = (imgData: ImageData, heightmap: number[][]): AppDispatchAction => {
     return {
         type: AppDispatchActionType.SET_IMG_DATA,
         value: {
@@ -119,14 +119,14 @@ export const createActionSetImgData = (imgData: ImageData, heightmap: number[][]
     }
 }
 
-export const createActionAddCountry = (country: Country) => {
+export const createActionAddCountry = (country: Country): AppDispatchAction => {
     return {
         type: AppDispatchActionType.ADD_COUNTRY,
         value: country,
     }
 }
 
-export const createActionSetCountryName = (name: string, tag: string) => {
+export const createActionSetCountryName = (name: string, tag: string): AppDispatchAction => {
     return {
         type: AppDispatchActionType.SET_COUNTRY_NAME,
         value: {
@@ -136,7 +136,7 @@ export const createActionSetCountryName = (name: string, tag: string) => {
     }
 }
 
-export const createActionSetCountryLeaderTraits = (characterTag: string, traits: string[]) => {
+export const createActionSetCountryLeaderTraits = (characterTag: string, traits: string[]): AppDispatchAction => {
     return {
         type: AppDispatchActionType.SET_COUNTRY_LEADER_TRAITS,
         value: {
@@ -146,7 +146,7 @@ export const createActionSetCountryLeaderTraits = (characterTag: string, traits:
     }
 }
 
-export const createActionSetAdvisorTraits = (characterTag: string,  advisor: any, traits: string[]) => {
+export const createActionSetAdvisorTraits = (characterTag: string,  advisor: any, traits: string[]): AppDispatchAction => {
     return {
         type: AppDispatchActionType.SET_ADVISOR_TRAITS,
         value: {
@@ -157,12 +157,21 @@ export const createActionSetAdvisorTraits = (characterTag: string,  advisor: any
     }
 }
 
-export const createActionSetUnitLeaderTraits = (characterTag: string, traits: string[]) => {
+export const createActionSetUnitLeaderTraits = (characterTag: string, traits: string[]): AppDispatchAction => {
     return {
         type: AppDispatchActionType.SET_UNIT_LEADER_TRAITS,
         value: {
             characterTag: characterTag,
             traits: traits,
+        }
+    }
+}
+
+export const createActionEditState = (appState: AppState | null): AppDispatchAction => {
+    return {
+        type: AppDispatchActionType.EDIT_STATE,
+        value: {
+            appState: appState,
         }
     }
 }

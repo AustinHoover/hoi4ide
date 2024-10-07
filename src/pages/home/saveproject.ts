@@ -231,6 +231,13 @@ export const saveProjectData = async (context: AppContextInterface) => {
         })
     }
 
+    //write overrides file
+    {
+        const content: string = JSON.stringify(projectDetails.projectFiles.overrideFile)
+        const path: string = projectDetails.paths.projectDir + "/overrides.json"
+        fs.writeFileSync(path,content)
+    }
+
     context.dispatch(createActionSetLoading(false))
     console.log("end save")
 }

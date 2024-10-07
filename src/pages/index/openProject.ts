@@ -1,6 +1,6 @@
 import { Jomini } from "jomini";
 import { AircraftEquipment, AirFleet, AppContextInterface, AppDispatchActionType, Character, Country, Fleet, ProjectDetails, ProjectFiles, Ship, State, TaskForce, Unit } from "../../state/mainState.interface";
-import { CharacterFile, CharacterPortraitFile, CharacterProperties, ConfigFile, CountryFile, HistoryCountryFile, HistoryStateFile, LocalisationFile, NationalFocusFile, SpriteFile, SpriteType, StateHistory, TagFile, UnitHistoryFile } from "../../interface/rawFile.interface";
+import { CharacterFile, CharacterPortraitFile, CharacterProperties, ConfigFile, CountryFile, HistoryCountryFile, HistoryStateFile, LocalisationFile, NationalFocusFile, OverrideFile, SpriteFile, SpriteType, StateHistory, TagFile, UnitHistoryFile } from "../../interface/rawFile.interface";
 import { cleanInvisibleCharacters, deleteFolderRecursive, getDirectoryOfFile, getFileNameFromPath, isVanillaPath, parseScopeableObjectTwo, serializeArbitraryPDXObject } from "../../util/Utils";
 import { createActionLoadProject, createActionSetError, createActionSetLoading } from "../../state/mainState.actions";
 import { cacheImageOnDisk } from "../../img/imageCache";
@@ -61,6 +61,9 @@ export const openProject = async (context: AppContextInterface, projectDir: stri
             exportDir: "",
             name: "",
         },
+        overrideFile: {
+            overridePaths: [],
+        },
         tagFiles: [],
         countryFiles: [],
         characterFiles: [],
@@ -117,6 +120,7 @@ export const openProject = async (context: AppContextInterface, projectDir: stri
         spriteMap: {},
     }
 
+    //read config file
     try {
         let data = fs.readFileSync(`${projectDir}/project.json`, 'utf8')
         // console.log(data);
@@ -126,6 +130,18 @@ export const openProject = async (context: AppContextInterface, projectDir: stri
         projectDetails.paths.exportDir = parsedConfigFile.exportDir
         projectDetails.metadata.name = parsedConfigFile.name
     } catch (e: any){
+        console.error(e)
+        context.dispatch(createActionSetError(e))
+    }
+
+    //read override file
+    try {
+        let data = fs.readFileSync(`${projectDir}/overrides.json`, 'utf8')
+        // console.log(data);
+        let dataModified = data
+        let overrideFile: OverrideFile = JSON.parse(dataModified)
+        projectFiles.overrideFile = overrideFile
+    } catch(e: any){
         console.error(e)
         context.dispatch(createActionSetError(e))
     }
@@ -280,6 +296,9 @@ export const openProject = async (context: AppContextInterface, projectDir: stri
     vanillaFiles = fs.readdirSync(`${projectDetails.paths.vanillaDir}/${currentFileDir}`, 'utf8').filter((name: string) => !overwriteFiles.includes(name))
     overwriteFiles = overwriteFiles.map(name => `${projectDir}/${currentFileDir}/${name}`)
     vanillaFiles = vanillaFiles.map(name => `${projectDetails.paths.vanillaDir}/${currentFileDir}/${name}`)
+    if(projectDetails.projectFiles.overrideFile.overridePaths.includes('history/states')){
+        vanillaFiles = []
+    }
     files = [...overwriteFiles,...vanillaFiles]
         // if(err === null){
         //     files.forEach(file => console.log(file))

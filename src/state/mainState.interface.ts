@@ -1,46 +1,173 @@
 import { Dispatch } from "react"
-import { CharacterFile, CharacterPortraitFile, CharacterProperties, ConfigFile, CountryFile, HistoryCountryFile, HistoryStateFile, LocalisationFile, NationalFocusFile, SpriteFile, StateHistory, TagFile, UnitEquipmentVariant, UnitFileDivisionName, UnitHistoryFile } from "../interface/rawFile.interface"
+import { CharacterFile, CharacterPortraitFile, CharacterProperties, ConfigFile, CountryFile, HistoryCountryFile, HistoryStateFile, LocalisationFile, NationalFocusFile, OverrideFile, SpriteFile, StateHistory, TagFile, UnitEquipmentVariant, UnitFileDivisionName, UnitHistoryFile } from "../interface/rawFile.interface"
 
 
-//app state related
-
+/**
+ * Main details about the project
+ */
 export interface ProjectDetails {
+
+    /**
+     * Metadata about the project
+     */
     metadata: ProjectMetadata,
+
+    /**
+     * Paths to various resources on disk
+     */
     paths: Paths,
+
+    /**
+     * State for whatever is currently being edited
+     */
     stateEditing: StateEditing,
+
+    /**
+     * Data about the currently edited country
+     */
     countryEditing: CountryEditing,
+
+    /**
+     * Data about the currently edited character
+     */
     characterEditing: CharacterEditing,
+
+    /**
+     * Data about the current unit being edited
+     */
     unitEditing: UnitEditing,
+
+    /**
+     * Data about the map being edited
+     */
     mapEditing: MapEditing,
+
+    /**
+     * All files in the project
+     */
     projectFiles: ProjectFiles,
+
+    /**
+     * The localization map
+     */
     localisationMap: any,
+
+    /**
+     * The sprite map
+     */
     spriteMap: any,
 }
 
+/**
+ * Metadata about the project
+ */
 export interface ProjectMetadata {
+
+    /**
+     * The name of the project
+     */
     name: string,
 }
 
+/**
+ * Paths to various resources on disk
+ */
 export interface Paths {
+
+    /**
+     * The root directory of the project
+     */
     projectDir: string,
+    
+    /**
+     * The directory to export to
+     */
     exportDir: string,
+
+    /**
+     * The directory that stores the vanilla game install
+     */
     vanillaDir: string,
+
+    /**
+     * The directory that hoi4ide is installed to
+     */
     installDir: string,
+
+    /**
+     * The image cache directory for base game images
+     */
     baseGameImgCacheDir: string,
+
+    /**
+     * The image cache directory for project-specific images
+     */
     projectImgCacheDir: string,
 }
 
+/**
+ * The files contained in the project
+ */
 export interface ProjectFiles {
+
+    /**
+     * The config file
+     */
     configFile: ConfigFile,
+
+    /**
+     * The file containing all overriden paths
+     */
+    overrideFile: OverrideFile,
+
+    /**
+     * The tag files
+     */
     tagFiles: TagFile[],
+
+    /**
+     * The country files
+     */
     countryFiles: CountryFile[],
+
+    /**
+     * The character files
+     */
     characterFiles: CharacterFile[],
+
+    /**
+     * The country history files
+     */
     historyCountryFiles: HistoryCountryFile[],
+
+    /**
+     * The state history files
+     */
     historyStateFiles: HistoryStateFile[],
+
+    /**
+     * The localization files
+     */
     localisationFiles: LocalisationFile[],
+
+    /**
+     * The character portrait files
+     */
     portraitFiles: CharacterPortraitFile[],
+
+    /**
+     * The unit history files
+     */
     unitHistoryFiles: UnitHistoryFile[],
+    
+    /**
+     * The national focus files
+     */
     nationalFocusFiles: NationalFocusFile[],
+
+    /**
+     * The sprite files
+     */
     spriteFiles: SpriteFile[],
 }
 
@@ -225,6 +352,9 @@ export let initialAppState: AppState = {
                 exportDir: "",
                 name: "",
             },
+            overrideFile: {
+                overridePaths: [],
+            },
             tagFiles: [],
             countryFiles: [],
             characterFiles: [],
@@ -279,6 +409,7 @@ export enum AppDispatchActionType {
     SET_COUNTRY_LEADER_TRAITS,
     SET_ADVISOR_TRAITS,
     SET_UNIT_LEADER_TRAITS,
+    EDIT_STATE,
 }
 
 export interface AppDispatchAction {

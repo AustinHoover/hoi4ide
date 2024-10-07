@@ -3,7 +3,7 @@ import { AppDispatchActionType, AppState, Country, ProjectDetails, ProjectFiles 
 
 
 export const appStateReducer = (state : AppState, action: any): AppState => {
-    let newState = {...state}
+    let newState: AppState = {...state}
     switch(action.type){
         case AppDispatchActionType.SET_LOADING: {
             newState.pageState.loading = action.value
@@ -124,6 +124,11 @@ export const appStateReducer = (state : AppState, action: any): AppState => {
                 }
             }
         } break;
+        case AppDispatchActionType.EDIT_STATE: {
+            newState = {
+                ...action.value.appState,
+            }
+        } break
     }
     return newState
 }

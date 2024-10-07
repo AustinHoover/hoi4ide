@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import { HashRouter, Route, Routes } from 'react-router-dom';
 import Index from './pages/index/Index';
@@ -16,6 +15,7 @@ import CreateCountry from './pages/createcountry/createcountry';
 import Maps from './pages/maps/maps';
 import Debug from './pages/debug/debug';
 import { AppConfig } from './AppConfig';
+import Project from './pages/project/project';
 
 export const AppContext = React.createContext(initialContext);
 
@@ -49,6 +49,7 @@ function App(props: AppProperties) {
             <Route path="/createcountry" element={<CreateCountry/>}/>
             <Route path="/createcharacter" element={<CreateCharacter/>}/>
             <Route path="/createunit" element={<CreateUnit/>}/>
+            <Route path="/project" element={<Project/>}/>
             <Route path="/map" element={<Maps/>}/>
             <Route path="/debug" element={<Debug/>}/>
           </Routes>
