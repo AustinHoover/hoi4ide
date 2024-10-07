@@ -61,6 +61,11 @@ export interface GenericDropdownProps {
      * The value of the dropdown
      */
     value?: any,
+
+    /**
+     * An optional label for the dropdown
+     */
+    label?: string,
 }
 
 /**
@@ -79,6 +84,10 @@ const GenericDropdown = (props: GenericDropdownProps) => {
     
     return (
         <div className="dropdown" style={{overflow: props.overflow ? "auto" : ""}}>
+            {
+                props.label &&
+                <label>{props.label}</label>
+            }
             <WindowedSelect
             options={props.options}
             onChange={onChange}

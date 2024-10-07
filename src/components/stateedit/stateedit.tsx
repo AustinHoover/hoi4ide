@@ -2,7 +2,6 @@ import * as React from "react";
 import { AppContext } from "../../App";
 import { createActionEditState, createActionOpenState } from "../../state/mainState.actions";
 import { AppContextInterface, Country, State } from "../../state/mainState.interface";
-import StateOwnerEdit from "../stateowneredit/stateowneredit";
 
 import "./stateedit.css"
 import GenericDropdown, { DropdownOption } from "../dropdowngeneric/dropdowngeneric";
@@ -23,6 +22,15 @@ export interface StateEditProps {
  */
 const MAX_PROVINCES = 10000
 
+//all province options available
+const provinceOptions: DropdownOption[] = []
+for(let i = 0; i < MAX_PROVINCES; i++){
+    provinceOptions.push({
+        label: i + '',
+        value: i,
+    })
+}
+
 /**
  * State to display on error
  */
@@ -31,6 +39,7 @@ const errorState: State = {
     name: "ERR",
     ownerTag: "ERR",
     provinces: [],
+    manpower: 0,
     historyFile: {
         path: "",
         state: {
@@ -72,9 +81,23 @@ const StateEdit = (props: StateEditProps) => {
         }
     })
 
+    //ownership related data
+    const initialOwner: DropdownOption = {
+        label: currentState.ownerTag,
+        value: currentState.ownerTag,
+    }
+    const allOwnerOptions: DropdownOption[] = state.projectDetails.countryEditing.countries.map(country => {
+        return {
+            label: country.tag,
+            value: country.tag,
+        }
+    })
+
     //tracks input provinces
     const [provinces,setProvinces] = React.useState<DropdownOption[]>(initialOptions)
     const [edited,setEdited] = React.useState<boolean>(false)
+    const [owner,setOwner] = React.useState<DropdownOption>(initialOwner)
+    const [manpower,setManpower] = React.useState<number>(currentState.manpower)
 
     //fires on selecting a province
     const onSelectProvince = (value: any) => {
@@ -82,36 +105,73 @@ const StateEdit = (props: StateEditProps) => {
         setEdited(true)
     }
 
-    //all province options available
-    const provinceOptions: DropdownOption[] = []
-    for(let i = 0; i < MAX_PROVINCES; i++){
-        provinceOptions.push({
-            label: i + '',
-            value: i,
-        })
+    //fires on editing manpower
+    const onEditManpower = (event: any) => {
+        setManpower(+event.target.value)
+        setEdited(true)
     }
 
     //saves all mutations made on the page
     const onSave = () => {
         currentState.provinces = provinces.map(option => option.value)
+        //filter provinces in this state from all other states
+        state.projectDetails.stateEditing.states.filter(toFilter => toFilter !== currentState).forEach(toFilter => {
+            toFilter.provinces = toFilter.provinces.filter(province => !currentState.provinces.includes(province))
+        })
+
+        currentState.manpower = manpower
+
         dispatch(createActionEditState({...state}))
         setEdited(false)
     }
 
     return (
         <div className="w-100 h-100">
-            <div className="card shadow m-3">
+            <div className="card shadow m-3"
+            style={{
+                minHeight: '50%'
+            }}
+            >
                 <div style={{display:"flex", flexDirection:"row", justifyContent: "space-between"}}>
                     <div style={{fontSize: "30px", padding: "30px"}}>{state.projectDetails.localisationMap[currentState.name]} ({currentState.name})</div>
                     <button type="button" className="btn-close" aria-label="Close" style={{margin: "15px", padding: "15px", backgroundColor: "#F00"}} onClick={()=>{dispatch(createActionOpenState(null))}}></button>
                 </div>
-                <div>
-                    <StateOwnerEdit ownerTag={currentState.ownerTag}/>
+
+
+                <div className="row row-cols-1 row-cols-md-3 g-4 flex-grow-1">
+
+                    <div className="owneredit col p-3">
+                        <div className="p-3 h-100">
+                            <GenericDropdown
+                                options={allOwnerOptions}
+                                value={owner}
+                                onChange={setOwner}
+                                label="Owner"
+                            />
+                        </div>
+                    </div>
+
+                    <div className="provinceedit col p-3">
+                        <div className="p-3 h-100">
+                            <GenericDropdown options={provinceOptions} onChange={onSelectProvince} value={provinces} isMulti={true} label="Provinces"/>
+                        </div>
+                    </div>
+
+                    <div className="miscedit col p-3">
+                        <div className="p-3 h-100 form-group">
+                            <label htmlFor="manpowerInput">Manpower</label>
+                            <input
+                                id="manpowerInput"
+                                type="number"
+                                className="form-control"
+                                value={manpower}
+                                onChange={onEditManpower}
+                            />
+                        </div>
+                    </div>
                 </div>
-                <div className="provinceedit m-3">
-                    <div className="text-left">Provinces</div>
-                    <GenericDropdown options={provinceOptions} onChange={onSelectProvince} value={provinces} isMulti={true}/>
-                </div>
+
+
                 <button className="btn btn-success m-3" onClick={onSave} disabled={!edited}>Save</button>
             </div>
         </div>

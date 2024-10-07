@@ -87,6 +87,9 @@ export const saveProjectData = async (context: AppContextInterface) => {
             if(state.provinces && state.provinces.length > 0){
                 historyFile.state.provinces = state.provinces
             }
+            if(state.manpower){
+                historyFile.state.manpower = state.manpower
+            }
         } else {
             throw new Error("Saving new states not implemented yet")
         }

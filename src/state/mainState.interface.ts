@@ -201,6 +201,11 @@ export interface State {
     provinces: number[],
 
     /**
+     * The manpower of the state
+     */
+    manpower: number,
+
+    /**
      * The history file associated with the state object
      */
     historyFile: HistoryStateFile,

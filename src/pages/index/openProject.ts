@@ -694,6 +694,7 @@ export const openProject = async (context: AppContextInterface, projectDir: stri
             name: stateFile.state.name,
             ownerTag: "",
             provinces: [],
+            manpower: 0,
             historyFile: stateFile,
         }
         stateFile?.state?.history?.scopes?.forEach(scope => {
@@ -703,6 +704,9 @@ export const openProject = async (context: AppContextInterface, projectDir: stri
         })
         if(stateFile?.state?.provinces){
             newState.provinces = stateFile?.state?.provinces
+        }
+        if(stateFile?.state?.manpower){
+            newState.manpower = stateFile?.state?.manpower
         }
         projectDetails.stateEditing.states.push(newState)
     })
