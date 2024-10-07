@@ -3,6 +3,7 @@ import * as React from "react";
 import "./dropdowngeneric.css"
 import { ChangeEvent } from "react";
 import ReactSelect, { ActionMeta, SingleValue } from "react-select";
+import WindowedSelect from "react-windowed-select";
 
 /**
  * Dropdown props
@@ -51,7 +52,7 @@ const GenericDropdown = (props: GenericDropdownProps) => {
         }
     }) as any
 
-    let onChange = (newValue: any, actionMeta: ActionMeta<string>) => {
+    let onChange = (newValue: any, actionMeta: ActionMeta<any>) => {
         const value = newValue?.value ? newValue.value : ''
         if(!!props.onSelect){
             props.onSelect(value)
@@ -63,10 +64,11 @@ const GenericDropdown = (props: GenericDropdownProps) => {
     
     return (
         <div className="dropdown" style={{overflow: props.overflow ? "auto" : ""}}>
-            <ReactSelect
+            <WindowedSelect
             options={options}
             onChange={onChange}
             isClearable={clearable}
+            windowThreshold={50}
             />
         </div>
     );
