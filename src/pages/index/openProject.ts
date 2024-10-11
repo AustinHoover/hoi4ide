@@ -122,6 +122,7 @@ export const openProject = async (context: AppContextInterface, projectDir: stri
 
     //read config file
     try {
+        console.log('read config')
         let data = fs.readFileSync(`${projectDir}/project.json`, 'utf8')
         // console.log(data);
         let dataModified = data
@@ -136,6 +137,7 @@ export const openProject = async (context: AppContextInterface, projectDir: stri
 
     //read override file
     try {
+        console.log('read overrides')
         let data = fs.readFileSync(`${projectDir}/overrides.json`, 'utf8')
         // console.log(data);
         let dataModified = data
@@ -147,6 +149,7 @@ export const openProject = async (context: AppContextInterface, projectDir: stri
     }
 
     //read country tag files
+    console.log('read country tag files')
     currentFileDir = "common/country_tags"
     overwriteFiles = fs.readdirSync(`${projectDir}/${currentFileDir}`, 'utf8')
     vanillaFiles = fs.readdirSync(`${projectDetails.paths.vanillaDir}/${currentFileDir}`, 'utf8').filter((name: string) => !overwriteFiles.includes(name))
@@ -174,6 +177,7 @@ export const openProject = async (context: AppContextInterface, projectDir: stri
     })
 
     //read country files
+    console.log('read country files')
     currentFileDir = "common/countries"
     overwriteFiles = fs.readdirSync(`${projectDir}/${currentFileDir}`, 'utf8')
     vanillaFiles = fs.readdirSync(`${projectDetails.paths.vanillaDir}/${currentFileDir}`, 'utf8').filter((name: string) => !overwriteFiles.includes(name))
@@ -205,6 +209,7 @@ export const openProject = async (context: AppContextInterface, projectDir: stri
     })
 
     //read character files
+    console.log('read character files')
     currentFileDir = "common/characters"
     overwriteFiles = fs.readdirSync(`${projectDir}/${currentFileDir}`, 'utf8')
     vanillaFiles = fs.readdirSync(`${projectDetails.paths.vanillaDir}/${currentFileDir}`, 'utf8').filter((name: string) => !overwriteFiles.includes(name))
@@ -241,6 +246,7 @@ export const openProject = async (context: AppContextInterface, projectDir: stri
     })
 
     //read country history files
+    console.log('read country history files')
     currentFileDir = "history/countries"
     overwriteFiles = fs.readdirSync(`${projectDir}/${currentFileDir}`, 'utf8')
     vanillaFiles = fs.readdirSync(`${projectDetails.paths.vanillaDir}/${currentFileDir}`, 'utf8').filter((name: string) => !overwriteFiles.includes(name))
@@ -303,6 +309,7 @@ export const openProject = async (context: AppContextInterface, projectDir: stri
     })
 
     //read state history files
+    console.log('read state history files')
     currentFileDir = "history/states"
     overwriteFiles = fs.readdirSync(`${projectDir}/${currentFileDir}`, 'utf8')
     vanillaFiles = fs.readdirSync(`${projectDetails.paths.vanillaDir}/${currentFileDir}`, 'utf8').filter((name: string) => !overwriteFiles.includes(name))
@@ -338,6 +345,7 @@ export const openProject = async (context: AppContextInterface, projectDir: stri
 
 
     //read localisation files
+    console.log('read localization files')
     let languageFilePathWhitelist: string[] = [
         'countries_l_english.yml',
         'state_names_l_english.yml',
@@ -360,6 +368,7 @@ export const openProject = async (context: AppContextInterface, projectDir: stri
 
     //read sprite files
     {
+        console.log('read sprite files')
         files = getFilesToLoadFilterEnding("interface",".gfx",fs,projectDetails)
         files.forEach(path => {
             let data = cleanInvisibleCharacters(fs.readFileSync(path, 'utf8'))
@@ -392,6 +401,7 @@ export const openProject = async (context: AppContextInterface, projectDir: stri
     }
 
     //read unit history files
+    console.log('read unit history files')
     files = getFilesToLoad("history/units",fs,projectDetails)
     files.forEach(path => {
         let data = cleanInvisibleCharacters(fs.readFileSync(path, 'utf8'))
@@ -583,6 +593,7 @@ export const openProject = async (context: AppContextInterface, projectDir: stri
     //
     //advisor traits
     {
+        console.log('read advisor data files')
         let traits: string[] = []
         files = getFilesToLoad("common/country_leader",fs,projectDetails)
         files.forEach(path => {
@@ -596,6 +607,7 @@ export const openProject = async (context: AppContextInterface, projectDir: stri
     }
     //unit leader traits
     {
+        console.log('read unit leader data files')
         let traits: string[] = []
         files = getFilesToLoad("common/unit_leader",fs,projectDetails)
         files.forEach(path => {
@@ -612,14 +624,18 @@ export const openProject = async (context: AppContextInterface, projectDir: stri
 
 
     //map localization strings
+    console.log('construct localization map')
     projectDetails.projectFiles.localisationFiles.forEach(localisationFile => {
-        let keys: string[] = Object.keys(localisationFile.l_english)
-        keys.forEach(key => {
-            projectDetails.localisationMap[key] = localisationFile.l_english[key]
-        })
+        if(localisationFile?.l_english){
+            let keys: string[] = Object.keys(localisationFile.l_english)
+            keys.forEach(key => {
+                projectDetails.localisationMap[key] = localisationFile.l_english[key]
+            })
+        }
     })
 
     //map sprite strings
+    console.log('construct sprite map')
     projectDetails.projectFiles.spriteFiles.forEach(spriteFile => {
         spriteFile.spriteTypes.forEach(spriteType => {
             projectDetails.spriteMap[spriteType.name] = spriteType.textureFile
@@ -627,6 +643,7 @@ export const openProject = async (context: AppContextInterface, projectDir: stri
     })
 
     {
+        console.log('map leader portraits')
         let leaderPortraits = getFilesToLoadRecursiveOverwrite("gfx/leaders",DirToRead.VANILLA,DirToRead.PROJECT,fs,projectDetails)
         leaderPortraits.forEach(path => {
             let data = fs.readFileSync(path, null)
@@ -640,6 +657,7 @@ export const openProject = async (context: AppContextInterface, projectDir: stri
 
     //if vanilla cache hasn't been created, create it
     if (!fs.existsSync(projectDetails.paths.baseGameImgCacheDir)) {
+        console.log('creating vanilla image cache')
         //generate image cache
         deleteFolderRecursive(projectDetails.paths.projectDir + "/imgcache")
         files = [...getFilesToLoadRecursiveNoOverwrite("gfx/leaders",DirToRead.VANILLA,fs,projectDetails),...getFilesToLoadRecursiveNoOverwrite("gfx/flags",DirToRead.VANILLA,fs,projectDetails)]
@@ -660,6 +678,7 @@ export const openProject = async (context: AppContextInterface, projectDir: stri
 
     //convert to in-ide datastructures
     //discover countries
+    console.log('discovering countries')
     projectDetails.projectFiles.tagFiles.forEach(tagFile => {
         let tagFileKeys: string[] = Object.keys(tagFile)
         tagFileKeys.filter(key => key !== "path").forEach(tag => {
@@ -688,6 +707,7 @@ export const openProject = async (context: AppContextInterface, projectDir: stri
         })
     })
     //discover states
+    console.log('discovering states')
     projectDetails.projectFiles.historyStateFiles.forEach(stateFile => {
         let newState: State = {
             id: stateFile.state.id,
@@ -729,6 +749,7 @@ export const openProject = async (context: AppContextInterface, projectDir: stri
         projectDetails.stateEditing.states.push(newState)
     })
     //discover characters
+    console.log('discovering characters')
     projectDetails.projectFiles.characterFiles.forEach(characterFile => {
         if(characterFile && characterFile.characters){
             let keys: string[] = Object.keys(characterFile.characters)
@@ -745,6 +766,7 @@ export const openProject = async (context: AppContextInterface, projectDir: stri
         }
     })
     //discover units
+    console.log('discovering units')
     projectDetails.projectFiles.unitHistoryFiles.forEach(unitHistoryFile => {
         // console.log("==============")
         // console.log(unitHistoryFile)
@@ -831,6 +853,7 @@ export const openProject = async (context: AppContextInterface, projectDir: stri
         }
     })
     //discover national focuses
+    console.log('discovering focuses')
     projectDetails.projectFiles.unitHistoryFiles.forEach(unitHistoryFile => {
         // console.log("==============")
         // console.log(unitHistoryFile)

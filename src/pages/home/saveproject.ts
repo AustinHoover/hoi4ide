@@ -22,6 +22,15 @@ export const saveProjectData = async (context: AppContextInterface) => {
 
     let projectDir: string = projectDetails.paths.projectDir
 
+    console.log('save countries')
+    //delete existing country files
+    {
+        fs.rmSync(`${projectDir}/common/countries`,{recursive: true, force: true})
+        fs.rmSync(`${projectDir}/history/countries`,{recursive: true, force: true})
+        fs.mkdirSync(`${projectDir}/common/countries`)
+        fs.mkdirSync(`${projectDir}/history/countries`)
+    }
+    //generate country files
     projectDetails.countryEditing.countries.forEach(country => {
         //country file
         let countryFile: CountryFile | undefined = country.countryFile
@@ -68,10 +77,12 @@ export const saveProjectData = async (context: AppContextInterface) => {
     })
 
     // write tag files
+    console.log('write tag files')
     projectDetails.projectFiles.tagFiles.forEach(tagFile => {
         writeFileJomini(tagFile, jomini, context, fs)
     })
 
+    console.log('write state files')
     projectDetails.stateEditing.states.forEach(state => {
         let historyFile: HistoryStateFile | undefined = state.historyFile
         if(historyFile){
@@ -110,6 +121,7 @@ export const saveProjectData = async (context: AppContextInterface) => {
 
     //write character files
     {
+        console.log('write character files')
         let characterTagMap: any = {}
         projectDetails.characterEditing.characters.forEach(character => {
             let tag: string = character.tag.substring(0,3)
@@ -140,6 +152,7 @@ export const saveProjectData = async (context: AppContextInterface) => {
 
     //write unit files
     {
+        console.log('write unit files')
         let unitAccumulatorMap: Record<string,{units?: Unit[],fleets?: Fleet[], airfleet?: AirFleet[]}> = {}
         //map units
         projectDetails.unitEditing.units.forEach(unit => {
@@ -259,6 +272,7 @@ export const saveProjectData = async (context: AppContextInterface) => {
 
     //write overrides file
     {
+        console.log('write overrides file')
         const content: string = JSON.stringify(projectDetails.projectFiles.overrideFile)
         const path: string = projectDetails.paths.projectDir + "/overrides.json"
         fs.writeFileSync(path,content)
